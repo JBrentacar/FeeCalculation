@@ -4,25 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JBレンタカー - 料金計算ツール</title>
-    <style>
+   <style>
+    /* 全体の設定 */
     body {
-        font-family: Arial, sans-serif;
+        font-family: 'Arial', sans-serif;
         background-color: #f4f4f4;
         color: #333;
         margin: 0;
         padding: 0;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
     }
 
+    /* タイトル */
     h1 {
         color: #0068e9;
+        font-size: 24px;
         text-align: center;
-        margin-bottom: 20px;
+        margin: 0 0 20px;
+        padding: 10px;
+        background-color: #ffc600;
+        border-radius: 5px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
+    /* フォーム */
     form {
         background-color: #fff;
         border: 2px solid #0068e9;
@@ -72,25 +83,43 @@
         background-color: #0051b5;
     }
 
+    /* 結果エリア */
     #result {
         margin-top: 20px;
-        background-color: #ffc600;
+        background-color: #fff;
         color: #333;
         padding: 15px;
-        border-radius: 5px;
+        border-radius: 10px;
         font-size: 14px;
         line-height: 1.6;
         border: 2px solid #0068e9;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
     }
 
-    div {
-        margin-bottom: 10px;
-    }
-
+    /* フォーム内の強調 */
     input:focus,
     select:focus {
         outline: 2px solid #ffc600;
+    }
+
+    /* 個別の結果のスタイル */
+    #result div {
+        margin-bottom: 10px;
+    }
+
+    /* 背景装飾（オプション） */
+    body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom right, #0068e9 30%, #ffc600 100%);
+        opacity: 0.1;
+        z-index: -1;
     }
 </style>
 
