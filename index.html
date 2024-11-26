@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JBレンタカー - 料金計算ツール</title>
-   <style>
+  <style>
     /* 全体の設定 */
     body {
         font-family: 'Arial', sans-serif;
@@ -17,6 +17,8 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
     }
 
     /* タイトル */
@@ -42,6 +44,7 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         max-width: 400px;
         width: 100%;
+        box-sizing: border-box;
     }
 
     label {
@@ -60,6 +63,7 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 16px;
+        box-sizing: border-box;
     }
 
     input[type="checkbox"] {
@@ -96,6 +100,7 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         max-width: 400px;
         width: 100%;
+        box-sizing: border-box;
     }
 
     /* フォーム内の強調 */
@@ -121,7 +126,35 @@
         opacity: 0.1;
         z-index: -1;
     }
+
+    /* スマホ対応 */
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 20px;
+            padding: 8px;
+        }
+
+        form {
+            padding: 15px;
+        }
+
+        input[type="date"],
+        input[type="number"],
+        select {
+            font-size: 14px;
+        }
+
+        button {
+            font-size: 14px;
+        }
+
+        #result {
+            font-size: 12px;
+            padding: 10px;
+        }
+    }
 </style>
+
 
 </head>
 <body>
