@@ -255,20 +255,36 @@ const formattedStartDate = startDateObj.toISOString().split("T")[0];
 const formattedReturnDate = returnDateObj.toISOString().split("T")[0];
 
 
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = `
-                <div>ご利用開始日: ${formattedStartDate}</div>
-                <div>ご返却日: ${formattedReturnDate}</div>
-                <div>基本料金: ¥${totalBaseRate.toLocaleString()}</div>
-                <div>車両保険: ¥${insuranceCost.toLocaleString()}</div>
-                <div>免責補償: ¥${waiverCost.toLocaleString()}</div>
-                <div>スタッドレスタイヤ: ¥${tiresCost.toLocaleString()}</div>
-                <div>ETC: ¥${etcCost.toLocaleString()}</div>
-                <div>カーナビ: ¥${gpsCost.toLocaleString()}</div>
-                <div>小計: ¥${subtotal.toLocaleString()}</div>
-                <div>税金 (10%): ¥${tax.toLocaleString()}</div>
-                <div>税込み合計: ¥${total.toLocaleString()}</div>
-            `;
+           const resultDiv = document.getElementById("result");
+resultDiv.innerHTML = `
+    <div>ご利用開始日: ${formattedStartDate}</div>
+    <div>ご返却日: ${formattedReturnDate}</div>
+    <div>基本料金: ¥${totalBaseRate.toLocaleString()}</div>
+    <div>車両保険: ¥${insuranceCost.toLocaleString()}</div>
+    <div>免責補償: ¥${waiverCost.toLocaleString()}</div>
+    <div>スタッドレスタイヤ: ¥${tiresCost.toLocaleString()}</div>
+    <div>ETC: ¥${etcCost.toLocaleString()}</div>
+    <div>カーナビ: ¥${gpsCost.toLocaleString()}</div>
+    <div>小計: ¥${subtotal.toLocaleString()}</div>
+    <div>税金 (10%): ¥${tax.toLocaleString()}</div>
+    <div>税込み合計: ¥${total.toLocaleString()}</div>
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="https://forms.wix.com/f/7157617580780290724" target="_blank" style="
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0068e9;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        " onmouseover="this.style.backgroundColor='#0051b5'" onmouseout="this.style.backgroundColor='#0068e9'">
+            お問い合わせはこちら
+        </a>
+    </div>
+`;
+
         }
     </script>
 </body>
