@@ -95,12 +95,13 @@
             const tax = Math.round(subtotal * 0.1);
             const total = subtotal + tax;
 
-            // 利用開始日と返却日
-            const startDateObj = new Date(startDate);
-            const returnDateObj = new Date(startDate);
-            returnDateObj.setDate(startDateObj.getDate() + days - 1);
-            const formattedStartDate = startDateObj.toISOString().split("T")[0];
-            const formattedReturnDate = returnDateObj.toISOString().split("T")[0];
+           // 利用開始日と返却日
+const startDateObj = new Date(startDate);
+const returnDateObj = new Date(startDate);
+returnDateObj.setDate(startDateObj.getDate() + days);
+const formattedStartDate = startDateObj.toISOString().split("T")[0];
+const formattedReturnDate = returnDateObj.toISOString().split("T")[0];
+
 
             const resultDiv = document.getElementById("result");
             resultDiv.innerHTML = `
