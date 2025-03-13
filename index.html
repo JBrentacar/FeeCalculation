@@ -87,7 +87,7 @@
             display: inline-block;
             margin-left: 5px;
             color: #0068e9;
-            cursor: help;
+            cursor: pointer; /* help から pointer に変更 */
             font-size: 16px;
         }
 
@@ -105,8 +105,16 @@
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
 
-        .tooltip:hover + .tooltip-text {
+        /* JavaScript用のショークラスを追加 */
+        .tooltip-text.show {
             display: block;
+        }
+        
+        /* デスクトップ用のホバー機能を維持 */
+        @media (hover: hover) {
+            .tooltip:hover + .tooltip-text {
+                display: block;
+            }
         }
 
         /* 入力フィールド */
@@ -432,6 +440,41 @@
             </a>
         </div>
     </div>
+
+    <!-- ツールチップのためのJavaScript -->
+    <script>
+        // ツールチップの機能を追加（タッチ/クリックサポート）
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltips = document.querySelectorAll('.tooltip');
+            
+            tooltips.forEach(tooltip => {
+                tooltip.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // 関連するツールチップテキストを探す
+                    const tooltipText = this.nextElementSibling;
+                    
+                    // 他の開いているツールチップを閉じる
+                    document.querySelectorAll('.tooltip-text.show').forEach(openTooltip => {
+                        if (openTooltip !== tooltipText) {
+                            openTooltip.classList.remove('show');
+                        }
+                    });
+                    
+                    // クリックされたツールチップを切り替える
+                    tooltipText.classList.toggle('show');
+                });
+            });
+            
+            // ページの他の場所をクリックしたときにツールチップを閉じる
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.tooltip-text.show').forEach(tooltip => {
+                    tooltip.classList.remove('show');
+                });
+            });
+        });
+    </script>
 
     <script>
         const rateTable = {
