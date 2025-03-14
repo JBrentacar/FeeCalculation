@@ -4,17 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JBレンタカー 簡単見積シミュレーション</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary: #4682B4;
-      --primary-dark: #36648B;
-      --secondary: #FFD700;
-      --text: #333;
-      --light-gray: #f5f5f5;
-      --gray: #ddd;
-      --white: #fff;
+      --primary: #06356f;      /* 濃いネイビー - ヘッダー背景 */
+      --primary-light: #0a4d90;
+      --accent: #FFD700;       /* 黄色 - アクセント */
+      --accent-light: #FFEB99;
+      --dark: #333333;         /* 濃いグレー - テキスト */
+      --text: #333333;
+      --text-light: #666666;
+      --light: #f5f5f5;
+      --white: #ffffff;
       --success: #28a745;
+      --error: #dc3545;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --border: #dddddd;
+      --radius: 4px;           /* より角張ったデザイン */
+      --transition: all 0.3s ease;
     }
     
     * {
@@ -27,7 +35,7 @@
       font-family: 'Noto Sans JP', sans-serif;
       color: var(--text);
       line-height: 1.6;
-      background-color: var(--light-gray);
+      background-color: var(--light);
       padding: 20px;
     }
     
@@ -35,8 +43,8 @@
       max-width: 1000px;
       margin: 0 auto;
       background-color: var(--white);
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      border-radius: 0;
+      box-shadow: 0 5px 15px var(--shadow);
       overflow: hidden;
     }
     
@@ -45,128 +53,236 @@
       color: var(--white);
       padding: 20px;
       text-align: center;
+      position: relative;
+      border-bottom: 3px solid var(--accent);
     }
     
     h1 {
       font-size: 28px;
       margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    header p {
+      font-size: 18px;
+      opacity: 0.9;
     }
     
     .intro {
-      padding: 20px;
+      padding: 30px 20px;
       text-align: center;
-      border-bottom: 1px solid var(--gray);
+      background-color: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .intro p {
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 16px;
+      color: var(--text-light);
     }
     
     .simulator {
-      padding: 20px;
+      padding: 30px 20px;
+      max-width: 900px;
+      margin: 0 auto;
     }
     
     .selector {
-      margin-bottom: 30px;
+      margin-bottom: 40px;
       text-align: center;
     }
     
     .selector label {
       display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-      font-size: 18px;
+      margin-bottom: 15px;
+      font-weight: 500;
+      font-size: 20px;
+      color: var(--dark);
     }
     
     .selector select {
       width: 100%;
-      max-width: 400px;
-      padding: 12px;
-      border: 2px solid var(--gray);
-      border-radius: 4px;
-      font-size: 16px;
+      max-width: 500px;
+      padding: 15px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 18px;
+      color: var(--dark);
+      background-color: var(--white);
+      box-shadow: 0 2px 5px var(--shadow);
       cursor: pointer;
+      transition: var(--transition);
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234682B4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      background-size: 20px;
+    }
+    
+    .selector select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.3);
     }
     
     .estimate-box {
       display: none;
-      border-radius: 8px;
+      border-radius: 0;
       overflow: hidden;
       margin-top: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      background-color: var(--white);
+      box-shadow: 0 2px 10px var(--shadow);
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     .car-details {
       display: flex;
       flex-wrap: wrap;
-      padding: 20px;
-      background-color: var(--light-gray);
+      padding: 25px;
+      background-color: var(--light);
       align-items: center;
+      border-bottom: 1px solid var(--border);
     }
     
     .car-image {
-      width: 200px;
-      height: 150px;
-      background-color: var(--gray);
-      border-radius: 4px;
+      width: 250px;
+      height: 180px;
+      background-color: var(--white);
+      border-radius: var(--radius);
+      box-shadow: 0 3px 10px var(--shadow);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-right: 20px;
+      margin-right: 30px;
       margin-bottom: 15px;
       overflow: hidden;
+      position: relative;
     }
     
     .car-image img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+    
+    .car-image:hover img {
+      transform: scale(1.05);
     }
     
     .car-image i {
-      font-size: 50px;
-      color: #888;
+      font-size: 60px;
+      color: var(--text-light);
     }
     
     .car-info {
       flex: 1;
       min-width: 250px;
+      padding: 10px;
     }
     
     .car-info h2 {
-      font-size: 22px;
-      margin-bottom: 5px;
-      color: var(--primary-dark);
+      font-size: 26px;
+      margin-bottom: 15px;
+      color: var(--primary);
+      font-weight: 700;
     }
     
     .car-info p {
-      font-size: 14px;
-      color: #666;
+      font-size: 18px;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+    
+    .cost-section {
+      padding: 30px;
+    }
+    
+    .section-title {
+      font-size: 22px;
+      color: var(--dark);
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+      font-weight: 500;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: var(--accent);
     }
     
     .cost-table {
       width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 30px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow);
     }
     
     .cost-table th, .cost-table td {
-      padding: 12px 15px;
+      padding: 15px 20px;
       text-align: left;
-      border-bottom: 1px solid var(--gray);
     }
     
     .cost-table th {
       background-color: var(--primary);
       color: var(--white);
-      font-weight: normal;
+      font-weight: 500;
+      font-size: 16px;
     }
     
-    .cost-table tr:nth-child(even) {
-      background-color: rgba(70, 130, 180, 0.05);
+    .cost-table th:first-child {
+      border-radius: 0;
+    }
+    
+    .cost-table th:last-child {
+      border-radius: 0;
+    }
+    
+    .cost-table tr:nth-child(odd) td {
+      background-color: var(--light);
+    }
+    
+    .cost-table tr:hover td {
+      background-color: rgba(41, 128, 185, 0.05);
+    }
+    
+    .cost-table td {
+      border-bottom: 1px solid var(--border);
+      font-size: 16px;
+      vertical-align: middle;
+    }
+    
+    .cost-table td:last-child {
+      font-weight: 500;
+      color: var(--dark);
+    }
+    
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .toggle-switch {
       position: relative;
       display: inline-block;
-      width: 50px;
-      height: 24px;
+      width: 60px;
+      height: 30px;
     }
     
     .toggle-switch input {
@@ -183,20 +299,21 @@
       right: 0;
       bottom: 0;
       background-color: #ccc;
-      transition: .4s;
-      border-radius: 24px;
+      transition: var(--transition);
+      border-radius: 30px;
     }
     
     .slider:before {
       position: absolute;
       content: "";
-      height: 16px;
-      width: 16px;
+      height: 22px;
+      width: 22px;
       left: 4px;
       bottom: 4px;
       background-color: white;
-      transition: .4s;
+      transition: var(--transition);
       border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     
     input:checked + .slider {
@@ -204,79 +321,225 @@
     }
     
     input:checked + .slider:before {
-      transform: translateX(26px);
+      transform: translateX(30px);
+    }
+    
+    input:focus + .slider {
+      box-shadow: 0 0 1px var(--success);
+    }
+    
+    .mandatory-item {
+      font-weight: 500;
+    }
+    
+    .option-item {
+      color: var(--text);
+    }
+    
+    .insurance-item {
+      color: var(--primary-light);
     }
     
     .summary {
-      background-color: var(--primary-dark);
+      background-color: var(--primary);
       color: var(--white);
-      padding: 15px;
+      padding: 25px;
+      border-radius: 0;
+    }
+    
+    .summary-title {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: var(--accent);
+      font-weight: 500;
     }
     
     .summary-row {
       display: flex;
       justify-content: space-between;
-      padding: 5px 0;
+      padding: 10px 0;
+      font-size: 16px;
     }
     
     .summary-row.total {
-      font-size: 20px;
-      font-weight: bold;
-      padding-top: 10px;
-      margin-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 24px;
+      font-weight: 700;
+      padding-top: 15px;
+      margin-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .notice {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: rgba(255, 215, 0, 0.1);
-      border-left: 4px solid var(--secondary);
-      border-radius: 4px;
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-left: 4px solid var(--accent);
+      border-radius: 0;
     }
     
     .notice h3 {
-      color: var(--primary-dark);
-      margin-bottom: 5px;
+      color: var(--dark);
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: 500;
     }
     
     .notice p {
-      font-size: 14px;
-      margin-bottom: 5px;
+      font-size: 15px;
+      margin-bottom: 8px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+    }
+    
+    .notice p i {
+      color: var(--success);
+      margin-right: 8px;
     }
     
     .notice a {
-      color: var(--primary);
+      color: var(--primary-light);
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 500;
+      transition: var(--transition);
     }
     
     .notice a:hover {
+      color: var(--primary);
       text-decoration: underline;
     }
     
     footer {
       text-align: center;
-      padding: 20px;
+      padding: 15px;
       background-color: var(--primary);
       color: var(--white);
       font-size: 14px;
+      position: relative;
+      border-top: 3px solid var(--accent);
     }
     
-    /* Responsive */
+    footer a {
+      color: var(--accent-light);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    footer a:hover {
+      color: var(--white);
+      text-decoration: underline;
+    }
+    
+    .footer-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    
+    .footer-info div {
+      margin: 0 15px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .footer-info i {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+    
+    /* レスポンシブデザイン */
     @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      header p {
+        font-size: 16px;
+      }
+      
+      .selector label {
+        font-size: 18px;
+      }
+      
+      .selector select {
+        padding: 12px;
+        font-size: 16px;
+      }
+      
       .car-details {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
+        padding: 20px;
       }
       
       .car-image {
+        width: 100%;
+        max-width: 250px;
         margin-right: 0;
+        margin-bottom: 20px;
       }
       
       .car-info {
-        width: 100%;
+        text-align: center;
+      }
+      
+      .car-info h2 {
+        font-size: 22px;
+      }
+      
+      .car-info p {
+        font-size: 16px;
+      }
+      
+      .cost-section {
+        padding: 20px;
+      }
+      
+      .cost-table th, .cost-table td {
+        padding: 12px 10px;
+        font-size: 14px;
+      }
+      
+      .summary {
+        padding: 20px;
+      }
+      
+      .summary-row {
+        font-size: 14px;
+      }
+      
+      .summary-row.total {
+        font-size: 20px;
+      }
+      
+      .footer-info div {
+        margin: 5px 0;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .cost-table th, .cost-table td {
+        padding: 10px 8px;
+        font-size: 13px;
+      }
+      
+      .toggle-switch {
+        width: 50px;
+        height: 26px;
+      }
+      
+      .slider:before {
+        height: 18px;
+        width: 18px;
+      }
+      
+      input:checked + .slider:before {
+        transform: translateX(24px);
       }
     }
   </style>
@@ -285,16 +548,16 @@
   <div class="container">
     <header>
       <h1>JBレンタカー 簡単見積シミュレーション</h1>
-      <p>ご希望の車両クラスを選択して、レンタル料金をシミュレーションできます</p>
+      <p>ご希望の車両クラスを選択して、レンタル料金をシミュレーション</p>
     </header>
     
     <div class="intro">
-      <p>下記のクラスから車両を選択すると、30日レンタルの料金とオプションを計算します。<br>お客様のニーズに合わせて最適なプランをお選びください。</p>
+      <p>下記のメニューから車両クラスを選択すると、30日レンタルの料金とオプションを自動計算します。<br>お客様のニーズに合わせた最適なプランをお選びいただけます。</p>
     </div>
     
     <div class="simulator">
       <div class="selector">
-        <label for="carClass">車両クラスを選択:</label>
+        <label for="carClass">車両クラスを選択してください</label>
         <select id="carClass">
           <option value="">-- 選択してください --</option>
           <option value="J1">J1クラス（2ドア／軽自動車）</option>
@@ -315,44 +578,60 @@
           </div>
         </div>
         
-        <table class="cost-table">
-          <thead>
-            <tr>
-              <th>項目</th>
-              <th>選択</th>
-              <th>金額（税抜）</th>
-            </tr>
-          </thead>
-          <tbody id="costDetails"></tbody>
-        </table>
-        
-        <div class="summary">
-          <div class="summary-row">
-            <span>小計金額（税抜）：</span>
-            <span id="subtotal">¥0</span>
-          </div>
-          <div class="summary-row">
-            <span>消費税（10％）：</span>
-            <span id="tax">¥0</span>
-          </div>
-          <div class="summary-row total">
-            <span>合計金額（税込）：</span>
-            <span id="total">¥0</span>
+        <div class="cost-section">
+          <h3 class="section-title">料金詳細</h3>
+          <table class="cost-table">
+            <thead>
+              <tr>
+                <th>項目</th>
+                <th>選択</th>
+                <th>金額（税抜）</th>
+              </tr>
+            </thead>
+            <tbody id="costDetails"></tbody>
+          </table>
+          
+          <div class="summary">
+            <h3 class="summary-title">料金サマリー</h3>
+            <div class="summary-row">
+              <span>基本料金（税抜）：</span>
+              <span id="basePrice">¥0</span>
+            </div>
+            <div class="summary-row">
+              <span>オプション料金（税抜）：</span>
+              <span id="optionPrice">¥0</span>
+            </div>
+            <div class="summary-row">
+              <span>小計金額（税抜）：</span>
+              <span id="subtotal">¥0</span>
+            </div>
+            <div class="summary-row">
+              <span>消費税（10％）：</span>
+              <span id="tax">¥0</span>
+            </div>
+            <div class="summary-row total">
+              <span>合計金額（税込）：</span>
+              <span id="total">¥0</span>
+            </div>
           </div>
         </div>
         
         <div class="notice">
           <h3>ご利用に関する重要なお知らせ</h3>
-          <p>✓ 30日以上のご利用で宮城県内配送無料（水曜祝日を除く平日のみ）</p>
-          <p>✓ 返却の際はJBレンタカー石巻店となります</p>
-          <p>✓ その他の料金シミュレーションは <a href="https://jbrentacar.github.io/FeeCalculation/" target="_blank">セルフ御見積</a> でご確認ください</p>
-          <p>✓ ご不明な点がございましたら、お気軽にお問い合わせください</p>
+          <p><i class="fas fa-check-circle"></i> 30日以上のご利用で宮城県内配送無料（水曜祝日を除く平日のみ）</p>
+          <p><i class="fas fa-check-circle"></i> 返却の際はJBレンタカー石巻店となります</p>
+          <p><i class="fas fa-check-circle"></i> その他の料金シミュレーションは <a href="https://jbrentacar.github.io/FeeCalculation/" target="_blank">セルフ御見積</a> でご確認ください</p>
+          <p><i class="fas fa-check-circle"></i> ご不明な点がございましたら、お気軽にお問い合わせください</p>
         </div>
       </div>
     </div>
     
     <footer>
-      &copy; 2025 JBレンタカー | 宮城県石巻市南中里2-9-27 | <a href="tel:0120204625" style="color: white;">0120-204-625</a>
+      <div>&copy; 2025 JBレンタカー</div>
+      <div class="footer-info">
+        <div><i class="fas fa-map-marker-alt"></i> 宮城県石巻市南中里2-9-27</div>
+        <div><i class="fas fa-phone"></i> <a href="tel:0120204625">0120-204-625</a></div>
+      </div>
     </footer>
   </div>
   
@@ -382,11 +661,6 @@
         description: "ヴィッツ、フィット、デミオなど",
         basePrice: 39800,
         image: "J4.png"
-      },
-      J5: { 
-        title: "J5クラス（商用貨物バンタイプ）", 
-        description: "日産キャラバン、マツダ ボンゴバンなど",
-        basePrice: 69800 
       }
     };
     
@@ -394,35 +668,35 @@
     const options = [
       { 
         id: "etc", 
-        label: "ETC車載器 ", 
+        label: "ETC車載器 (選択オプション)", 
         price: 2000, 
         type: "option",
         default: false
       },
       { 
         id: "navi", 
-        label: "カーナビ ", 
+        label: "カーナビ (選択オプション)", 
         price: 2000, 
         type: "option",
         default: false
       },
       { 
         id: "winter", 
-        label: "スタッドレスタイヤ ", 
+        label: "スタッドレスタイヤ (選択オプション)", 
         price: 6000, 
         type: "option",
         default: false
       },
       { 
         id: "insurance", 
-        label: "車両保険", 
+        label: "車両保険（任意加入）", 
         price: 6000, 
         type: "insurance",
         default: false
       },
       { 
         id: "liability", 
-        label: "免責補償", 
+        label: "免責補償（任意加入）", 
         price: 6000, 
         type: "insurance",
         default: false
@@ -435,6 +709,8 @@
     const classTitle = document.getElementById("classTitle");
     const classDescription = document.getElementById("classDescription");
     const costDetails = document.getElementById("costDetails");
+    const basePriceElement = document.getElementById("basePrice");
+    const optionPriceElement = document.getElementById("optionPrice");
     const subtotalElement = document.getElementById("subtotal");
     const taxElement = document.getElementById("tax");
     const totalElement = document.getElementById("total");
@@ -449,21 +725,25 @@
       const selectedClass = carClassSelect.value;
       if (!selectedClass || !classData[selectedClass]) return;
       
-      let subtotal = classData[selectedClass].basePrice;
+      const basePrice = classData[selectedClass].basePrice;
+      let optionPrice = 0;
       
-      // 選択されたオプションの料金を追加
+      // 選択されたオプションの料金を計算
       options.forEach(option => {
         const checkbox = document.getElementById(option.id);
         if (checkbox && checkbox.checked) {
-          subtotal += option.price;
+          optionPrice += option.price;
         }
       });
       
-      // 税金と合計を計算
+      // 合計金額を計算
+      const subtotal = basePrice + optionPrice;
       const tax = Math.floor(subtotal * 0.1);
       const total = subtotal + tax;
       
       // 表示を更新
+      basePriceElement.textContent = formatCurrency(basePrice);
+      optionPriceElement.textContent = formatCurrency(optionPrice);
       subtotalElement.textContent = formatCurrency(subtotal);
       taxElement.textContent = formatCurrency(tax);
       totalElement.textContent = formatCurrency(total);
@@ -513,12 +793,13 @@
         
         // 基本料金の行を追加
         const baseRow = document.createElement("tr");
+        baseRow.className = "mandatory-item";
         
         const baseLabel = document.createElement("td");
         baseLabel.textContent = "基本料金 (30日レンタル)";
         
         const baseToggle = document.createElement("td");
-        baseToggle.textContent = "-";
+        baseToggle.innerHTML = '<div class="toggle-container"><i class="fas fa-check" style="color: var(--success)"></i></div>';
         
         const baseValue = document.createElement("td");
         baseValue.textContent = formatCurrency(data.basePrice);
@@ -532,11 +813,20 @@
         options.forEach(option => {
           const row = document.createElement("tr");
           
+          if (option.type === "option") {
+            row.className = "option-item";
+          } else if (option.type === "insurance") {
+            row.className = "insurance-item";
+          }
+          
           const labelCell = document.createElement("td");
           labelCell.textContent = option.label;
           
           const toggleCell = document.createElement("td");
-          toggleCell.appendChild(createToggleSwitch(option));
+          const toggleContainer = document.createElement("div");
+          toggleContainer.className = "toggle-container";
+          toggleContainer.appendChild(createToggleSwitch(option));
+          toggleCell.appendChild(toggleContainer);
           
           const valueCell = document.createElement("td");
           valueCell.textContent = formatCurrency(option.price);
