@@ -274,6 +274,28 @@
             font-weight: bold;
         }
 
+        /* 車両画像表示エリア */
+        .car-image-container {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .car-image {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eaeaea;
+        }
+
+        .car-image-caption {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
         /* スマホ対応 */
         @media (max-width: 576px) {
             .card {
@@ -377,14 +399,20 @@
             
             <div class="form-group">
                 <label for="carClass">車両クラス <span class="highlight">*</span></label>
-                <select id="carClass" required>
+                <select id="carClass" required onchange="updateCarImage()">
                     <option value="">選択してください</option>
-                    <option value="J-1">J-1：軽自動車（2ドア）- アルト、ミラなど</option>
-                    <option value="J-2">J-2：軽自動車（4ドア）- ワゴンR、EKワゴンなど</option>
-                    <option value="J-3">J-3：軽貨物バン - ハイゼットなど</option>
-                    <option value="J-4">J-4：小型乗用車 - ヴィッツ、フィットなど</option>
+                    <option value="J-1">J-1：軽自動車（2ドア）</option>
+                    <option value="J-2">J-2：軽自動車（4ドア）</option>
+                    <option value="J-3">J-3：軽貨物バン</option>
+                    <option value="J-4">J-4：小型乗用車 </option>
                 </select>
                 <div id="carClassError" class="error-message" style="color: red; display: none;">車両クラスを選択してください</div>
+            </div>
+            
+            <!-- 車両画像表示エリア -->
+            <div id="carImageContainer" class="car-image-container">
+                <img id="carImage" class="car-image" src="" alt="選択された車両の画像">
+                <div id="carImageCaption" class="car-image-caption"></div>
             </div>
             
             <div class="section-title">オプション</div>
@@ -486,6 +514,38 @@
             "INS_WAIVER": [1000, 2000, 2000, 2000, 2000, 2000, 2000, 3000, 4000, 4000, 4000, 4000, 4000, 4000, 5000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000],
             "WINTER_TIRES": [1000, 2000, 3000, 3000, 3000, 3000, 3000, 4000, 5000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000]
         };
+
+        // 車両クラスの説明文
+        const carDescriptions = {
+            "J-1": "軽自動車（2ドア） - コンパクトで使いやすい車両です。狭い道や市街地での運転に最適です。",
+            "J-2": "軽自動車（4ドア） - 実用的で乗り降りしやすい軽自動車です。小さなお荷物も積めます。",
+            "J-3": "軽貨物バン - 荷物の多い方におすすめ。後部座席を倒せば大きな荷物も積載可能です。",
+            "J-4": "小型乗用車 - 快適な乗り心地と十分な荷室スペースを兼ね備えた実用的な車両です。"
+        };
+
+        // 車両画像を更新する関数
+        function updateCarImage() {
+            const carClass = document.getElementById("carClass").value;
+            const carImageContainer = document.getElementById("carImageContainer");
+            const carImage = document.getElementById("carImage");
+            const carImageCaption = document.getElementById("carImageCaption");
+            
+            if (carClass) {
+                // 車両クラスに応じた画像パスを設定
+                const imageName = carClass.replace("-", "") + ".png"; // J-1 → J1.png
+                carImage.src = imageName;
+                carImage.alt = document.getElementById("carClass").options[document.getElementById("carClass").selectedIndex].text;
+                
+                // キャプションを設定
+                carImageCaption.textContent = carDescriptions[carClass] || "";
+                
+                // 画像コンテナを表示
+                carImageContainer.style.display = "block";
+            } else {
+                // 車両クラスが選択されていない場合は非表示
+                carImageContainer.style.display = "none";
+            }
+        }
 
         // 日付入力欄に今日の日付をデフォルトで設定
         document.addEventListener('DOMContentLoaded', function() {
@@ -598,6 +658,12 @@
             const formattedStartDate = formatDate(startDateObj);
             const formattedReturnDate = formatDate(returnDateObj);
 
+            // 選択した車両の画像を結果にも表示
+            const carImageHTML = carClass ? 
+                `<div style="text-align: center; margin: 15px 0;">
+                    <img src="${carClass.replace("-", "")}.png" alt="${document.getElementById("carClass").options[document.getElementById("carClass").selectedIndex].text}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #eaeaea;">
+                </div>` : '';
+
             // 結果表示
             const resultContent = document.getElementById("resultContent");
             resultContent.innerHTML = `
@@ -617,6 +683,7 @@
                     <span class="result-label">選択車両:</span>
                     <span class="result-value">${document.getElementById("carClass").options[document.getElementById("carClass").selectedIndex].text}</span>
                 </div>
+                ${carImageHTML}
                 <div class="result-row">
                     <span class="result-label">基本料金:</span>
                     <span class="result-value">¥${totalBaseRate.toLocaleString()}</span>
