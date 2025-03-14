@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>簡単見積シミュレーション</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .estimate-box { border: 1px solid #ccc; padding: 20px; margin-top: 20px; }
+    .car-image { max-width: 300px; display: block; margin-bottom: 20px; }
+    .cost-table { width: 100%; border-collapse: collapse; }
+    .cost-table th, .cost-table td { border: 1px solid #ddd; padding: 8px; }
+    .cost-table th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h1>車両レンタル 簡単見積シミュレーション</h1>
+  <p>クラスを選択すると、基本料金とオプションの料金が表示されます。</p>
+  
+  <label for="carClass">車両クラスを選択:</label>
+  <select id="carClass">
+    <option value="">-- 選択してください --</option>
+    <option value="J1">J1クラス</option>
+    <option value="J2">J2クラス</option>
+    <option value="J3">J3クラス</option>
+    <option value="J4">J4クラス</option>
+  </select>
+  
+  <div id="estimate" class="estimate-box" style="display:none;">
+    <img id="carImage" class="car-image" src="" alt="車両イメージ">
+    <h2 id="classTitle"></h2>
+    <table class="cost-table">
+      <tbody id="costDetails"></tbody>
+    </table>
+    <p>※料金は税抜価格です。<br>
+       返却の際はJBレンタカー石巻店となります。<br>
+       その他の料金シミュレーションは <a href="https://jbrentacar.github.io/FeeCalculation/" target="_blank">セルフ御見積</a> でご確認ください。
+    </p>
+  </div>
+  
+  <script>
+    // クラスごとの基本料金とイメージを定義
+    const classData = {
+      J1: { title: "J1クラス", image: "J1.png", basePrice: "23,940円" },
+      J2: { title: "J2クラス", image: "J2.png", basePrice: "29,580円" },
+      J3: { title: "J3クラス", image: "J3.png", basePrice: "39,500円" },
+      J4: { title: "J4クラス", image: "J4.png", basePrice: "39,800円" }
+    };
+
+    // 共通のオプション料金（順序は表示順）
+    const commonOptions = [
+      { label: "ETC車載器 (選択オプション)", value: "2,000円" },
+      { label: "カーナビ (選択オプション)", value: "2,000円" },
+      { label: "スタッドレスタイヤ (選択オプション)", value: "6,000円" },
+      { label: "車両保険", value: "6,000円" },
+      { label: "免責補償", value: "6,000円" }
+    ];
+
+    const carClassSelect = document.getElementById("carClass");
+    const estimateBox = document.getElementById("estimate");
+    const carImage = document.getElementById("carImage");
+    const classTitle = document.getElementById("classTitle");
+    const costDetails = document.getElementById("costDetails");
+
+    carClassSelect.addEventListener("change", function() {
+      const selectedClass = carClassSelect.value;
+      if(selectedClass && classData[selectedClass]){
+        const data = classData[selectedClass];
+        classTitle.textContent = data.title;
+        carImage.src = data.image;
+        carImage.alt = data.title + "のイメージ";
+        costDetails.innerHTML = "";
+        
+        // 基本料金の行を追加
+        const baseRow = document.createElement("tr");
+        const baseLabel = document.createElement("td");
+        baseLabel.textContent = "基本料金 (30日レンタル)";
+        const baseValue = document.createElement("td");
+        baseValue.textContent = data.basePrice;
+        baseRow.appendChild(baseLabel);
+        baseRow.appendChild(baseValue);
+        costDetails.appendChild(baseRow);
+        
+        // 共通オプションの行を追加
+        commonOptions.forEach(item => {
+          const row = document.createElement("tr");
+          const labelCell = document.createElement("td");
+          labelCell.textContent = item.label;
+          const valueCell = document.createElement("td");
+          valueCell.textContent = item.value;
+          row.appendChild(labelCell);
+          row.appendChild(valueCell);
+          costDetails.appendChild(row);
+        });
+        estimateBox.style.display = "block";
+      } else {
+        estimateBox.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
