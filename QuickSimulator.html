@@ -110,6 +110,13 @@
       justify-content: center;
       margin-right: 20px;
       margin-bottom: 15px;
+      overflow: hidden;
+    }
+    
+    .car-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
     
     .car-image i {
@@ -355,22 +362,26 @@
       J1: { 
         title: "J1クラス（2ドア／軽自動車）", 
         description: "アルト、ミニカ、ミラなど",
-        basePrice: 23940 
+        basePrice: 23940,
+        image: "J1.png"
       },
       J2: { 
         title: "J2クラス（4ドア／軽自動車）", 
         description: "ワゴンR、EKワゴン、ムーブなど",
-        basePrice: 29580 
+        basePrice: 29580,
+        image: "J2.png"
       },
       J3: { 
         title: "J3クラス（軽貨物バンタイプ）", 
         description: "ハイゼット、ミニキャブ、アクティなど",
-        basePrice: 39500 
+        basePrice: 39500,
+        image: "J3.png"
       },
       J4: { 
         title: "J4クラス（小型乗用車）", 
         description: "ヴィッツ、フィット、デミオなど",
-        basePrice: 39800 
+        basePrice: 39800,
+        image: "J4.png"
       },
       J5: { 
         title: "J5クラス（商用貨物バンタイプ）", 
@@ -383,35 +394,35 @@
     const options = [
       { 
         id: "etc", 
-        label: "ETC車載器 (選択オプション)", 
+        label: "ETC車載器 ", 
         price: 2000, 
         type: "option",
         default: false
       },
       { 
         id: "navi", 
-        label: "カーナビ (選択オプション)", 
+        label: "カーナビ ", 
         price: 2000, 
         type: "option",
         default: false
       },
       { 
         id: "winter", 
-        label: "スタッドレスタイヤ (選択オプション)", 
+        label: "スタッドレスタイヤ ", 
         price: 6000, 
         type: "option",
         default: false
       },
       { 
         id: "insurance", 
-        label: "車両保険（任意加入）", 
+        label: "車両保険", 
         price: 6000, 
         type: "insurance",
         default: false
       },
       { 
         id: "liability", 
-        label: "免責補償（任意加入）", 
+        label: "免責補償", 
         price: 6000, 
         type: "insurance",
         default: false
@@ -488,6 +499,14 @@
         // クラス情報を表示
         classTitle.textContent = data.title;
         classDescription.textContent = data.description;
+        
+        // 車両画像を表示
+        const carImageContainer = document.querySelector('.car-image');
+        if (data.image) {
+          carImageContainer.innerHTML = `<img src="${data.image}" alt="${data.title}">`;
+        } else {
+          carImageContainer.innerHTML = '<i class="fas fa-car"></i>';
+        }
         
         // コスト詳細テーブルをクリア
         costDetails.innerHTML = "";
