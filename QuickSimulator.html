@@ -2,97 +2,539 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>簡単見積シミュレーション</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JBレンタカー 簡単見積シミュレーション</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    .estimate-box { border: 1px solid #ccc; padding: 20px; margin-top: 20px; }
-    .car-image { max-width: 300px; display: block; margin-bottom: 20px; }
-    .cost-table { width: 100%; border-collapse: collapse; }
-    .cost-table th, .cost-table td { border: 1px solid #ddd; padding: 8px; }
-    .cost-table th { background-color: #f2f2f2; }
+    :root {
+      --primary: #4682B4;
+      --primary-dark: #36648B;
+      --secondary: #FFD700;
+      --text: #333;
+      --light-gray: #f5f5f5;
+      --gray: #ddd;
+      --white: #fff;
+      --success: #28a745;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: var(--light-gray);
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    
+    header {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 20px;
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    
+    .intro {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--gray);
+    }
+    
+    .simulator {
+      padding: 20px;
+    }
+    
+    .selector {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .selector label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .selector select {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px;
+      border: 2px solid var(--gray);
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    .estimate-box {
+      display: none;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .car-details {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      background-color: var(--light-gray);
+      align-items: center;
+    }
+    
+    .car-image {
+      width: 200px;
+      height: 150px;
+      background-color: var(--gray);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .car-image i {
+      font-size: 50px;
+      color: #888;
+    }
+    
+    .car-info {
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .car-info h2 {
+      font-size: 22px;
+      margin-bottom: 5px;
+      color: var(--primary-dark);
+    }
+    
+    .car-info p {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    .cost-table th, .cost-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--gray);
+    }
+    
+    .cost-table th {
+      background-color: var(--primary);
+      color: var(--white);
+      font-weight: normal;
+    }
+    
+    .cost-table tr:nth-child(even) {
+      background-color: rgba(70, 130, 180, 0.05);
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: var(--success);
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
+    .summary {
+      background-color: var(--primary-dark);
+      color: var(--white);
+      padding: 15px;
+    }
+    
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+    }
+    
+    .summary-row.total {
+      font-size: 20px;
+      font-weight: bold;
+      padding-top: 10px;
+      margin-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .notice {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: rgba(255, 215, 0, 0.1);
+      border-left: 4px solid var(--secondary);
+      border-radius: 4px;
+    }
+    
+    .notice h3 {
+      color: var(--primary-dark);
+      margin-bottom: 5px;
+    }
+    
+    .notice p {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    
+    .notice a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    
+    .notice a:hover {
+      text-decoration: underline;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: var(--primary);
+      color: var(--white);
+      font-size: 14px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .car-details {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      
+      .car-image {
+        margin-right: 0;
+      }
+      
+      .car-info {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>車両レンタル 簡単見積シミュレーション</h1>
-  <p>クラスを選択すると、基本料金とオプションの料金が表示されます。</p>
-  
-  <label for="carClass">車両クラスを選択:</label>
-  <select id="carClass">
-    <option value="">-- 選択してください --</option>
-    <option value="J1">J1クラス</option>
-    <option value="J2">J2クラス</option>
-    <option value="J3">J3クラス</option>
-    <option value="J4">J4クラス</option>
-  </select>
-  
-  <div id="estimate" class="estimate-box" style="display:none;">
-    <img id="carImage" class="car-image" src="" alt="車両イメージ">
-    <h2 id="classTitle"></h2>
-    <table class="cost-table">
-      <tbody id="costDetails"></tbody>
-    </table>
-    <p>※料金は税抜価格です。<br>
-       返却の際はJBレンタカー石巻店となります。<br>
-       その他の料金シミュレーションは <a href="https://jbrentacar.github.io/FeeCalculation/" target="_blank">セルフ御見積</a> でご確認ください。
-    </p>
+  <div class="container">
+    <header>
+      <h1>JBレンタカー 簡単見積シミュレーション</h1>
+      <p>ご希望の車両クラスを選択して、レンタル料金をシミュレーションできます</p>
+    </header>
+    
+    <div class="intro">
+      <p>下記のクラスから車両を選択すると、30日レンタルの料金とオプションを計算します。<br>お客様のニーズに合わせて最適なプランをお選びください。</p>
+    </div>
+    
+    <div class="simulator">
+      <div class="selector">
+        <label for="carClass">車両クラスを選択:</label>
+        <select id="carClass">
+          <option value="">-- 選択してください --</option>
+          <option value="J1">J1クラス（2ドア／軽自動車）</option>
+          <option value="J2">J2クラス（4ドア／軽自動車）</option>
+          <option value="J3">J3クラス（軽貨物バンタイプ）</option>
+          <option value="J4">J4クラス（小型乗用車）</option>
+        </select>
+      </div>
+      
+      <div id="estimate" class="estimate-box">
+        <div class="car-details">
+          <div class="car-image">
+            <i class="fas fa-car"></i>
+          </div>
+          <div class="car-info">
+            <h2 id="classTitle"></h2>
+            <p id="classDescription"></p>
+          </div>
+        </div>
+        
+        <table class="cost-table">
+          <thead>
+            <tr>
+              <th>項目</th>
+              <th>選択</th>
+              <th>金額（税抜）</th>
+            </tr>
+          </thead>
+          <tbody id="costDetails"></tbody>
+        </table>
+        
+        <div class="summary">
+          <div class="summary-row">
+            <span>小計金額（税抜）：</span>
+            <span id="subtotal">¥0</span>
+          </div>
+          <div class="summary-row">
+            <span>消費税（10％）：</span>
+            <span id="tax">¥0</span>
+          </div>
+          <div class="summary-row total">
+            <span>合計金額（税込）：</span>
+            <span id="total">¥0</span>
+          </div>
+        </div>
+        
+        <div class="notice">
+          <h3>ご利用に関する重要なお知らせ</h3>
+          <p>✓ 30日以上のご利用で宮城県内配送無料（水曜祝日を除く平日のみ）</p>
+          <p>✓ 返却の際はJBレンタカー石巻店となります</p>
+          <p>✓ その他の料金シミュレーションは <a href="https://jbrentacar.github.io/FeeCalculation/" target="_blank">セルフ御見積</a> でご確認ください</p>
+          <p>✓ ご不明な点がございましたら、お気軽にお問い合わせください</p>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
+      &copy; 2025 JBレンタカー | 宮城県石巻市南中里2-9-27 | <a href="tel:0120204625" style="color: white;">0120-204-625</a>
+    </footer>
   </div>
   
   <script>
     // クラスごとの基本料金とイメージを定義
     const classData = {
-      J1: { title: "J1クラス", image: "J1.png", basePrice: "23,940円" },
-      J2: { title: "J2クラス", image: "J2.png", basePrice: "29,580円" },
-      J3: { title: "J3クラス", image: "J3.png", basePrice: "39,500円" },
-      J4: { title: "J4クラス", image: "J4.png", basePrice: "39,800円" }
+      J1: { 
+        title: "J1クラス（2ドア／軽自動車）", 
+        description: "アルト、ミニカ、ミラなど",
+        basePrice: 23940 
+      },
+      J2: { 
+        title: "J2クラス（4ドア／軽自動車）", 
+        description: "ワゴンR、EKワゴン、ムーブなど",
+        basePrice: 29580 
+      },
+      J3: { 
+        title: "J3クラス（軽貨物バンタイプ）", 
+        description: "ハイゼット、ミニキャブ、アクティなど",
+        basePrice: 39500 
+      },
+      J4: { 
+        title: "J4クラス（小型乗用車）", 
+        description: "ヴィッツ、フィット、デミオなど",
+        basePrice: 39800 
+      },
+      J5: { 
+        title: "J5クラス（商用貨物バンタイプ）", 
+        description: "日産キャラバン、マツダ ボンゴバンなど",
+        basePrice: 69800 
+      }
     };
-
-    // 共通のオプション料金（順序は表示順）
-    const commonOptions = [
-      { label: "ETC車載器 (選択オプション)", value: "2,000円" },
-      { label: "カーナビ (選択オプション)", value: "2,000円" },
-      { label: "スタッドレスタイヤ (選択オプション)", value: "6,000円" },
-      { label: "車両保険", value: "6,000円" },
-      { label: "免責補償", value: "6,000円" }
+    
+    // オプション情報の定義
+    const options = [
+      { 
+        id: "etc", 
+        label: "ETC車載器 (選択オプション)", 
+        price: 2000, 
+        type: "option",
+        default: false
+      },
+      { 
+        id: "navi", 
+        label: "カーナビ (選択オプション)", 
+        price: 2000, 
+        type: "option",
+        default: false
+      },
+      { 
+        id: "winter", 
+        label: "スタッドレスタイヤ (選択オプション)", 
+        price: 6000, 
+        type: "option",
+        default: false
+      },
+      { 
+        id: "insurance", 
+        label: "車両保険（任意加入）", 
+        price: 6000, 
+        type: "insurance",
+        default: false
+      },
+      { 
+        id: "liability", 
+        label: "免責補償（任意加入）", 
+        price: 6000, 
+        type: "insurance",
+        default: false
+      }
     ];
-
+    
+    // DOM要素の取得
     const carClassSelect = document.getElementById("carClass");
     const estimateBox = document.getElementById("estimate");
-    const carImage = document.getElementById("carImage");
     const classTitle = document.getElementById("classTitle");
+    const classDescription = document.getElementById("classDescription");
     const costDetails = document.getElementById("costDetails");
-
+    const subtotalElement = document.getElementById("subtotal");
+    const taxElement = document.getElementById("tax");
+    const totalElement = document.getElementById("total");
+    
+    // 金額をフォーマットする関数
+    function formatCurrency(amount) {
+      return "¥" + amount.toLocaleString();
+    }
+    
+    // 料金を計算して表示を更新する関数
+    function calculateTotal() {
+      const selectedClass = carClassSelect.value;
+      if (!selectedClass || !classData[selectedClass]) return;
+      
+      let subtotal = classData[selectedClass].basePrice;
+      
+      // 選択されたオプションの料金を追加
+      options.forEach(option => {
+        const checkbox = document.getElementById(option.id);
+        if (checkbox && checkbox.checked) {
+          subtotal += option.price;
+        }
+      });
+      
+      // 税金と合計を計算
+      const tax = Math.floor(subtotal * 0.1);
+      const total = subtotal + tax;
+      
+      // 表示を更新
+      subtotalElement.textContent = formatCurrency(subtotal);
+      taxElement.textContent = formatCurrency(tax);
+      totalElement.textContent = formatCurrency(total);
+    }
+    
+    // トグルスイッチを作成する関数
+    function createToggleSwitch(option) {
+      const label = document.createElement("label");
+      label.className = "toggle-switch";
+      
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.id = option.id;
+      input.checked = option.default;
+      input.addEventListener("change", calculateTotal);
+      
+      const slider = document.createElement("span");
+      slider.className = "slider";
+      
+      label.appendChild(input);
+      label.appendChild(slider);
+      
+      return label;
+    }
+    
+    // 車両クラス選択時の処理
     carClassSelect.addEventListener("change", function() {
       const selectedClass = carClassSelect.value;
-      if(selectedClass && classData[selectedClass]){
+      
+      if(selectedClass && classData[selectedClass]) {
         const data = classData[selectedClass];
+        
+        // クラス情報を表示
         classTitle.textContent = data.title;
-        carImage.src = data.image;
-        carImage.alt = data.title + "のイメージ";
+        classDescription.textContent = data.description;
+        
+        // コスト詳細テーブルをクリア
         costDetails.innerHTML = "";
         
         // 基本料金の行を追加
         const baseRow = document.createElement("tr");
+        
         const baseLabel = document.createElement("td");
         baseLabel.textContent = "基本料金 (30日レンタル)";
+        
+        const baseToggle = document.createElement("td");
+        baseToggle.textContent = "-";
+        
         const baseValue = document.createElement("td");
-        baseValue.textContent = data.basePrice;
+        baseValue.textContent = formatCurrency(data.basePrice);
+        
         baseRow.appendChild(baseLabel);
+        baseRow.appendChild(baseToggle);
         baseRow.appendChild(baseValue);
         costDetails.appendChild(baseRow);
         
-        // 共通オプションの行を追加
-        commonOptions.forEach(item => {
+        // オプションの行を追加
+        options.forEach(option => {
           const row = document.createElement("tr");
+          
           const labelCell = document.createElement("td");
-          labelCell.textContent = item.label;
+          labelCell.textContent = option.label;
+          
+          const toggleCell = document.createElement("td");
+          toggleCell.appendChild(createToggleSwitch(option));
+          
           const valueCell = document.createElement("td");
-          valueCell.textContent = item.value;
+          valueCell.textContent = formatCurrency(option.price);
+          
           row.appendChild(labelCell);
+          row.appendChild(toggleCell);
           row.appendChild(valueCell);
           costDetails.appendChild(row);
         });
+        
+        // 料金を計算して表示
+        calculateTotal();
+        
+        // 見積もりボックスを表示
         estimateBox.style.display = "block";
       } else {
+        // 選択がないか無効な場合は見積もりボックスを非表示
         estimateBox.style.display = "none";
       }
     });
