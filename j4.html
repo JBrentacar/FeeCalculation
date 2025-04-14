@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JBレンタカー - J-4見積もり</title>
+    <title>JBレンタカー - J-4専用見積もり</title>
     <style>
         /* 全体の設定 */
         body {
@@ -368,11 +368,11 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">JBレンタカー石巻店</div>
+        <div class="logo">JBレンタカー</div>
         <div class="exhibition-badge">石巻駅前展示車両</div>
     </div>
 
-    <h1>&#x1F697; J-4クラス見積もり</h1>
+    <h1>&#x1F697; J-4専用見積もり</h1>
 
     <div class="steps-container">
         <div class="step active">
@@ -407,8 +407,8 @@
             
             <div class="form-group">
                 <label for="days">ご利用日数 <span class="highlight">*</span></label>
-                <input type="number" id="days" min="7" max="365" value="7" step="1">
-                <div id="daysError" class="error-message" style="color: red; display: none;">利用日数は7日以上で入力してください</div>
+                <input type="number" id="days" min="1" max="365" value="7" step="1">
+                <div id="daysError" class="error-message" style="color: red; display: none;">利用日数は1日以上で入力してください</div>
             </div>
             
             <div class="section-title">オプション</div>
@@ -458,11 +458,11 @@
         <div class="section-title">お見積もり結果</div>
         <div id="resultContent"></div>
         
-        <div class="source-info">※石巻駅前展示車両からの見積もりです</div>
+        <div class="source-info"></div>
         
         <div class="inquiry-link">
-            <a href="https://jb-rentacar.com/miyagi/?note=石巻駅前展示車両より見積を実施しました" target="_blank" class="button-link">
-                予約手続きへ進む &#x27A1;
+            <a href="https://jb-rentacar.com/miyagi/#contact?note=石巻駅前展示車両より見積を実施しました(10)" target="_blank" class="button-link">
+                空車問い合わせ手続きへ進む &#x27A1;
             </a>
         </div>
     </div>
