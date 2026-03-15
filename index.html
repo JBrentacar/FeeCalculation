@@ -3,749 +3,528 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JBレンタカー - くわしく見積もり</title>
+    <title>料金シミュレーション - JBレンタカー石巻店</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        /* 全体の設定 */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'メイリオ', sans-serif;
-            background-color: #f9f9f9;
+            font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+            background: #f0f4f8;
             color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* ヘッダーとロゴ */
-        .header {
+        header {
+            background: linear-gradient(135deg, #0068e9, #0051b5);
+            padding: 20px 16px 24px;
             text-align: center;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 500px;
+            color: white;
         }
 
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            color: #0068e9;
-            margin-bottom: 5px;
+        header img { max-width: 90px; margin-bottom: 8px; }
+        header h1 { font-size: 19px; font-weight: 700; letter-spacing: .05em; }
+        header p { font-size: 13px; opacity: .85; margin-top: 4px; }
+
+        main {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px 14px 60px;
         }
 
-        /* タイトル */
-        h1 {
-            color: #fff;
-            font-size: 24px;
-            text-align: center;
-            margin: 0 0 20px;
-            padding: 12px 20px;
-            background-color: #0068e9;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* カード */
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,.08);
+            padding: 22px 18px;
+            margin-bottom: 16px;
         }
 
-        /* カード形式のコンテナ */
-        .card {
-            background-color: #fff;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-            max-width: 500px;
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 20px;
-            border: 1px solid #eaeaea;
-        }
-
-        /* セクションタイトル */
-        .section-title {
-            font-size: 18px;
-            color: #0068e9;
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #ffc600;
-        }
-
-        /* フォームグループ */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: block;
-            color: #333;
-        }
-
-        .tooltip {
-            display: inline-block;
-            margin-left: 5px;
-            color: #0068e9;
-            cursor: pointer; /* help から pointer に変更 */
-            font-size: 16px;
-        }
-
-        .tooltip-text {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 10px;
+        .card-title {
             font-size: 14px;
-            z-index: 1;
-            width: 250px;
+            font-weight: 700;
             color: #333;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* JavaScript用のショークラスを追加 */
-        .tooltip-text.show {
+        .card-title i { color: #0068e9; }
+
+        /* フィールド */
+        .field-group { margin-bottom: 14px; }
+
+        .field-group label {
             display: block;
-        }
-        
-        /* デスクトップ用のホバー機能を維持 */
-        @media (hover: hover) {
-            .tooltip:hover + .tooltip-text {
-                display: block;
-            }
+            font-size: 13px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 6px;
         }
 
-        /* 入力フィールド */
-        input[type="date"],
-        input[type="number"],
-        select {
+        .field-group input,
+        .field-group select {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 8px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-            background-color: #f9f9f9;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            padding: 12px 14px;
+            border: 1.5px solid #dde3ec;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #333;
+            background: #fafbfd;
+            transition: border-color .2s, box-shadow .2s;
+            -webkit-appearance: none;
         }
 
-        input[type="date"]:focus,
-        input[type="number"]:focus,
-        select:focus {
+        .field-group input:focus,
+        .field-group select:focus {
             outline: none;
             border-color: #0068e9;
-            box-shadow: 0 0 0 3px rgba(0, 104, 233, 0.2);
+            box-shadow: 0 0 0 3px rgba(0,104,233,.15);
+            background: white;
         }
 
-        /* チェックボックスのスタイル */
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px 20px;
-            margin-top: 10px;
+        /* 車両画像 */
+        .car-image-wrap {
+            display: none;
+            text-align: center;
+            margin: 4px 0 14px;
         }
 
-        .checkbox-container {
+        .car-image-wrap img {
+            max-width: 100%;
+            max-height: 130px;
+            border-radius: 10px;
+            border: 1.5px solid #eee;
+        }
+
+        .car-image-caption {
+            font-size: 12px;
+            color: #999;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        /* オプションチェック */
+        .option-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .option-item {
             display: flex;
             align-items: center;
-            flex: 1 0 40%;
-            min-width: 180px;
+            gap: 10px;
+            background: #f7f9fc;
+            border: 1.5px solid #e8edf5;
+            border-radius: 10px;
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: border-color .2s, background .2s;
         }
 
-        .checkbox-container input[type="checkbox"] {
-            margin-right: 10px;
+        .option-item:has(input:checked) {
+            border-color: #0068e9;
+            background: #eef5ff;
+        }
+
+        .option-item input[type="checkbox"] {
             width: 18px;
             height: 18px;
             accent-color: #0068e9;
-        }
-
-        /* ボタン */
-        button {
-            width: 100%;
-            padding: 14px;
-            background-color: #0068e9;
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
+            flex-shrink: 0;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            margin-top: 10px;
-            box-shadow: 0 4px 8px rgba(0, 104, 233, 0.3);
         }
 
-        button:hover {
-            background-color: #0051b5;
-            transform: translateY(-2px);
+        .option-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #333;
+            flex: 1;
         }
 
-        button:active {
-            transform: translateY(0);
+        .option-info {
+            color: #bbb;
+            font-size: 13px;
+            cursor: pointer;
         }
 
-        /* 結果エリア */
-        #result {
+        /* ツールチップ */
+        .tooltip-wrap { position: relative; display: inline-block; }
+
+        .tooltip-box {
             display: none;
-            transition: opacity 0.5s ease;
+            position: absolute;
+            right: 0;
+            bottom: calc(100% + 6px);
+            background: #333;
+            color: white;
+            font-size: 12px;
+            border-radius: 8px;
+            padding: 8px 12px;
+            width: 200px;
+            line-height: 1.6;
+            z-index: 10;
+            font-weight: 400;
         }
 
-        #result.visible {
-            display: block;
-            opacity: 1;
+        .tooltip-box.show { display: block; }
+
+        /* 送信ボタン */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #0068e9, #0051b5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,104,233,.35);
+            transition: transform .2s, box-shadow .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+
+        .submit-btn:active {
+            transform: scale(.98);
+            box-shadow: 0 2px 6px rgba(0,104,233,.3);
+        }
+
+        /* 結果カード */
+        .result-card {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,.08);
+            padding: 22px 18px;
+            margin-bottom: 16px;
+        }
+
+        .result-card.visible { display: block; }
 
         .result-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f4f8;
+            font-size: 14px;
         }
 
-        .result-row:last-child {
-            border-bottom: none;
-        }
+        .result-row:last-of-type { border-bottom: none; }
+        .result-label { color: #777; }
+        .result-value { font-weight: 700; color: #333; }
 
-        .result-label {
-            font-weight: normal;
-        }
-
-        .result-value {
-            font-weight: bold;
-            color: #0068e9;
-        }
-
-        .total-row {
-            font-size: 20px;
-            color: #0068e9;
-            font-weight: bold;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px solid #0068e9;
-        }
-
-        /* テーマカラーのハイライト */
-        .highlight {
-            color: #0068e9;
-            font-weight: bold;
-        }
-
-        /* ステップ表示 */
-        .steps-container {
+        .total-block {
+            background: linear-gradient(135deg, #0068e9, #0051b5);
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-top: 14px;
             display: flex;
             justify-content: space-between;
-            width: 100%;
-            max-width: 500px;
-            margin-bottom: 20px;
+            align-items: center;
+            color: white;
         }
 
-        .step {
-            text-align: center;
-            flex: 1;
-        }
+        .total-block .label { font-size: 14px; opacity: .9; }
+        .total-block .amount { font-size: 24px; font-weight: 700; }
 
-        .step-circle {
-            display: inline-flex;
+        .inquiry-btn {
+            display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
-            height: 30px;
-            background-color: #ddd;
-            color: #fff;
-            border-radius: 50%;
-            margin-bottom: 8px;
-        }
-
-        .step.active .step-circle {
-            background-color: #0068e9;
-        }
-
-        .step-label {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .step.active .step-label {
-            color: #0068e9;
-            font-weight: bold;
-        }
-
-        /* 車両画像表示エリア - スマホ対応修正 */
-        .car-image-container {
-            margin-top: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-            display: none;
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        .car-image {
-            max-width: 100%;
-            height: auto;
-            max-height: 150px; /* スマホ用に高さ制限を追加 */
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #eaeaea;
-        }
-
-        .car-image-caption {
-            margin-top: 8px;
-            font-size: 13px;
-            color: #666;
-        }
-
-        /* スマホ対応 */
-        @media (max-width: 576px) {
-            .card {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 20px;
-                padding: 10px 15px;
-            }
-
-            .section-title {
-                font-size: 16px;
-            }
-
-            .checkbox-container {
-                flex: 1 0 100%;
-            }
-
-            .steps-container {
-                display: none;
-            }
-            
-            /* スマホ向け画像サイズ調整 */
-            .car-image {
-                max-height: 120px;
-            }
-            
-            .car-image-caption {
-                font-size: 12px;
-                margin-top: 5px;
-            }
-        }
-
-        /* アニメーション */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        /* 問い合わせリンク */
-        .inquiry-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .button-link {
-            display: inline-block;
-            padding: 14px 20px;
-            background-color: #ffc600;
+            gap: 8px;
+            background: linear-gradient(135deg, #ffc600, #f4a100);
             color: #333;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 4px 8px rgba(255, 198, 0, 0.3);
+            font-size: 15px;
+            font-weight: 700;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 14px;
+            box-shadow: 0 4px 12px rgba(255,198,0,.4);
+            transition: transform .2s;
         }
 
-        .button-link:hover {
-            background-color: #ffb400;
-            transform: translateY(-2px);
-        }
+        .inquiry-btn:active { transform: scale(.98); }
 
-        .button-link:active {
-            transform: translateY(0);
+        /* エラー */
+        .err { color: #e74c3c; font-size: 12px; margin-top: 4px; display: none; }
+
+        footer {
+            background: linear-gradient(135deg, #0068e9, #0051b5);
+            color: white;
+            text-align: center;
+            padding: 18px;
+            font-size: 13px;
+            line-height: 1.8;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">JBレンタカー</div>
-    </div>
 
-    <h1>&#x1F697; くわしく見積もり</h1>
+<header>
+    <img src="logo.png" alt="JBレンタカー石巻店">
+    <h1>料金シミュレーション</h1>
+    <p>ご利用条件を入力してお見積もり</p>
+</header>
 
-    <div class="steps-container">
-        <div class="step active">
-            <div class="step-circle">1</div>
-            <div class="step-label">条件入力</div>
-        </div>
-        <div class="step">
-            <div class="step-circle">2</div>
-            <div class="step-label">見積結果</div>
-        </div>
-        <div class="step">
-            <div class="step-circle">3</div>
-            <div class="step-label">予約確認</div>
-        </div>
-    </div>
+<main>
 
-    <div class="card">
-        <form id="rentalForm" onsubmit="event.preventDefault(); calculateAndShowResult();">
-            <div class="section-title">基本情報</div>
-            
-            <div class="form-group">
-                <label for="startDate">ご利用開始日 <span class="highlight">*</span></label>
+    <form id="rentalForm" onsubmit="event.preventDefault(); calculate();">
+
+        <!-- 基本情報 -->
+        <div class="form-card">
+            <div class="card-title"><i class="fas fa-calendar-alt"></i> 基本情報</div>
+
+            <div class="field-group">
+                <label>ご利用開始日</label>
                 <input type="date" id="startDate" required>
-                <div id="startDateError" class="error-message" style="color: red; display: none;">利用開始日を選択してください</div>
+                <div class="err" id="errDate">利用開始日を選択してください</div>
             </div>
-            
-            <div class="form-group">
-                <label for="days">ご利用日数 <span class="highlight">*</span></label>
+
+            <div class="field-group">
+                <label>ご利用日数</label>
                 <input type="number" id="days" min="1" max="365" value="7" step="1">
-                <div id="daysError" class="error-message" style="color: red; display: none;">利用日数は7日以上で入力してください</div>
+                <div class="err" id="errDays">7日以上で入力してください</div>
             </div>
-            
-            <div class="form-group">
-                <label for="carClass">車両クラス <span class="highlight">*</span></label>
+
+            <div class="field-group">
+                <label>車両クラス</label>
                 <select id="carClass" required onchange="updateCarImage()">
                     <option value="">選択してください</option>
                     <option value="J-1">J-1：軽自動車（2ドア）</option>
                     <option value="J-2">J-2：軽自動車（4ドア）</option>
                     <option value="J-3">J-3：軽貨物バン</option>
-                    <option value="J-4">J-4：小型乗用車 </option>
+                    <option value="J-4">J-4：小型乗用車</option>
                 </select>
-                <div id="carClassError" class="error-message" style="color: red; display: none;">車両クラスを選択してください</div>
+                <div class="err" id="errCar">車両クラスを選択してください</div>
             </div>
-            
-            <!-- 車両画像表示エリア -->
-            <div id="carImageContainer" class="car-image-container">
-                <img id="carImage" class="car-image" src="" alt="選択された車両の画像">
-                <div id="carImageCaption" class="car-image-caption"></div>
-            </div>
-            
-            <div class="section-title">オプション</div>
-            
-            <div class="checkbox-group">
-                <div class="checkbox-container">
-                    <input type="checkbox" id="insurance">
-                    <label for="insurance">車両保険</label>
-                    <div class="tooltip">ⓘ</div>
-                    <div class="tooltip-text">レンタカーの損傷や事故に対する保険です。</div>
-                </div>
-                
-                <div class="checkbox-container">
-                    <input type="checkbox" id="waiver">
-                    <label for="waiver">免責補償</label>
-                    <div class="tooltip">ⓘ</div>
-                    <div class="tooltip-text">万が一の事故の際、自己負担額を軽減します。</div>
-                </div>
-                
-                <div class="checkbox-container">
-                    <input type="checkbox" id="tires">
-                    <label for="tires">スタッドレスタイヤ</label>
-                    <div class="tooltip">ⓘ</div>
-                    <div class="tooltip-text">雪道や凍結した道路での安全走行に必要です。</div>
-                </div>
-                
-                <div class="checkbox-container">
-                    <input type="checkbox" id="etc">
-                    <label for="etc">ETC</label>
-                    <div class="tooltip">ⓘ</div>
-                    <div class="tooltip-text">高速道路の料金所をスムーズに通過できます。ETCカードは別途ご用意ください。</div>
-                </div>
-                
-                <div class="checkbox-container">
-                    <input type="checkbox" id="gps">
-                    <label for="gps">カーナビ</label>
-                    <div class="tooltip">ⓘ</div>
-                    <div class="tooltip-text">目的地への道順を案内します。</div>
-                </div>
-            </div>
-            
-            <button type="submit">見積もりを計算する</button>
-        </form>
-    </div>
 
-    <div id="result" class="card">
-        <div class="section-title">お見積もり結果</div>
-        <div id="resultContent"></div>
-        
-        <div class="inquiry-link">
-            <a href="https://jb-rentacar.com/miyagi/#contact" target="_blank" class="button-link">
-                空き状況を確認する &#x27A1;
-            </a>
+            <div class="car-image-wrap" id="carImageWrap">
+                <img id="carImage" src="" alt="">
+                <div class="car-image-caption" id="carCaption"></div>
+            </div>
         </div>
+
+        <!-- オプション -->
+        <div class="form-card">
+            <div class="card-title"><i class="fas fa-plus-circle"></i> オプション</div>
+            <div class="option-grid">
+
+                <label class="option-item">
+                    <input type="checkbox" id="insurance">
+                    <span class="option-label">車両保険</span>
+                    <span class="option-info tooltip-wrap">
+                        <i class="fas fa-info-circle" onclick="tipToggle(event,'tip-ins')"></i>
+                        <div class="tooltip-box" id="tip-ins">損傷や事故に対する保険です。</div>
+                    </span>
+                </label>
+
+                <label class="option-item">
+                    <input type="checkbox" id="waiver">
+                    <span class="option-label">免責補償</span>
+                    <span class="option-info tooltip-wrap">
+                        <i class="fas fa-info-circle" onclick="tipToggle(event,'tip-waiver')"></i>
+                        <div class="tooltip-box" id="tip-waiver">事故時の自己負担額を軽減します。</div>
+                    </span>
+                </label>
+
+                <label class="option-item">
+                    <input type="checkbox" id="tires">
+                    <span class="option-label">スタッドレス</span>
+                    <span class="option-info tooltip-wrap">
+                        <i class="fas fa-info-circle" onclick="tipToggle(event,'tip-tires')"></i>
+                        <div class="tooltip-box" id="tip-tires">雪道・凍結路での安全走行に。</div>
+                    </span>
+                </label>
+
+                <label class="option-item">
+                    <input type="checkbox" id="etc">
+                    <span class="option-label">ETC</span>
+                    <span class="option-info tooltip-wrap">
+                        <i class="fas fa-info-circle" onclick="tipToggle(event,'tip-etc')"></i>
+                        <div class="tooltip-box" id="tip-etc">高速料金所をスムーズに通過。ETCカードは別途ご用意ください。</div>
+                    </span>
+                </label>
+
+                <label class="option-item" style="grid-column: span 2;">
+                    <input type="checkbox" id="gps">
+                    <span class="option-label">カーナビ</span>
+                    <span class="option-info tooltip-wrap">
+                        <i class="fas fa-info-circle" onclick="tipToggle(event,'tip-gps')"></i>
+                        <div class="tooltip-box" id="tip-gps">目的地への道順を案内します。</div>
+                    </span>
+                </label>
+
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+            <i class="fas fa-calculator"></i> 見積もりを計算する
+        </button>
+
+    </form>
+
+    <!-- 結果 -->
+    <div class="result-card" id="resultCard">
+        <div class="card-title"><i class="fas fa-receipt"></i> お見積もり結果</div>
+        <div id="resultRows"></div>
+        <div class="total-block">
+            <span class="label">合計金額（税込）</span>
+            <span class="amount" id="totalAmount">―</span>
+        </div>
+        <a href="https://jb-rentacar.com/miyagi/#contact" target="_blank" class="inquiry-btn">
+            <i class="fas fa-calendar-check"></i> 空き状況を確認する
+        </a>
     </div>
 
-    <!-- ツールチップのためのJavaScript -->
-    <script>
-        // ツールチップの機能を追加（タッチ/クリックサポート）
-        document.addEventListener('DOMContentLoaded', function() {
-            const tooltips = document.querySelectorAll('.tooltip');
-            
-            tooltips.forEach(tooltip => {
-                tooltip.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // 関連するツールチップテキストを探す
-                    const tooltipText = this.nextElementSibling;
-                    
-                    // 他の開いているツールチップを閉じる
-                    document.querySelectorAll('.tooltip-text.show').forEach(openTooltip => {
-                        if (openTooltip !== tooltipText) {
-                            openTooltip.classList.remove('show');
-                        }
-                    });
-                    
-                    // クリックされたツールチップを切り替える
-                    tooltipText.classList.toggle('show');
-                });
-            });
-            
-            // ページの他の場所をクリックしたときにツールチップを閉じる
-            document.addEventListener('click', function() {
-                document.querySelectorAll('.tooltip-text.show').forEach(tooltip => {
-                    tooltip.classList.remove('show');
-                });
-            });
+</main>
+
+<footer>
+    &copy; 2025 JBレンタカー石巻店<br>
+    0120-204-625
+</footer>
+
+<script>
+    const rateTable = {
+        "J-1": [1980,3960,5940,7700,7700,7700,7700,9680,11660,13640,15400,15400,15400,15400,17380,19360,21340,23100,23100,23100,23100,23940,23940,23940,23940,23940,23940,23940,23940,23940],
+        "J-2": [2480,4960,7440,9600,9600,9600,9600,12080,14560,17040,19200,19200,19200,19200,21680,24160,26640,28800,28800,28800,28800,29580,29580,29580,29580,29580,29580,29580,29580,29580],
+        "J-3": [3180,6360,9540,12720,13400,13400,13400,16580,19760,22940,26120,26800,26800,26800,29980,33160,36340,39500,39500,39500,39500,39500,39500,39500,39500,39500,39500,39500,39500,39500],
+        "J-4": [3380,6760,10140,13520,16900,17480,17480,20860,24240,27620,31000,34380,34960,34960,38340,39800,39800,39800,39800,39800,39800,39800,39800,39800,39800,39800,39800,39800,39800,39800],
+        "ETC_NAV":    [500,1000,1000,1000,1000,1000,1000,1500,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000],
+        "INS_WAIVER": [1000,2000,2000,2000,2000,2000,2000,3000,4000,4000,4000,4000,4000,4000,5000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000],
+        "WINTER_TIRES":[1000,2000,3000,3000,3000,3000,3000,4000,5000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000,6000]
+    };
+
+    const carDescriptions = {
+        "J-1": "コンパクトで市街地や狭い道に最適",
+        "J-2": "乗り降りしやすい4ドア軽自動車",
+        "J-3": "荷物が多い方に。後部を倒せば大型荷物も可",
+        "J-4": "快適な乗り心地と十分な荷室スペース"
+    };
+
+    // 初期値セット
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').value = today;
+    });
+
+    function updateCarImage() {
+        const val = document.getElementById('carClass').value;
+        const wrap = document.getElementById('carImageWrap');
+        if (val) {
+            document.getElementById('carImage').src = val.replace('-', '') + '.png';
+            document.getElementById('carCaption').textContent = carDescriptions[val] || '';
+            wrap.style.display = 'block';
+        } else {
+            wrap.style.display = 'none';
+        }
+    }
+
+    function tipToggle(e, id) {
+        e.preventDefault();
+        e.stopPropagation();
+        document.querySelectorAll('.tooltip-box.show').forEach(el => {
+            if (el.id !== id) el.classList.remove('show');
         });
-    </script>
+        document.getElementById(id).classList.toggle('show');
+    }
 
-    <script>
-        const rateTable = {
-            "J-1": [1980, 3960, 5940, 7700, 7700, 7700, 7700, 9680, 11660, 13640, 15400, 15400, 15400, 15400, 17380, 19360, 21340, 23100, 23100, 23100, 23100, 23940, 23940, 23940, 23940, 23940, 23940, 23940, 23940, 23940],
-            "J-2": [2480, 4960, 7440, 9600, 9600, 9600, 9600, 12080, 14560, 17040, 19200, 19200, 19200, 19200, 21680, 24160, 26640, 28800, 28800, 28800, 28800, 29580, 29580, 29580, 29580, 29580, 29580, 29580, 29580, 29580],
-            "J-3": [3180, 6360, 9540, 12720, 13400, 13400, 13400, 16580, 19760, 22940, 26120, 26800, 26800, 26800, 29980, 33160, 36340, 39500, 39500, 39500, 39500, 39500, 39500, 39500, 39500, 39500, 39500, 39500, 39500, 39500],
-            "J-4": [3380, 6760, 10140, 13520, 16900, 17480, 17480, 20860, 24240, 27620, 31000, 34380, 34960, 34960, 38340, 39800, 39800, 39800, 39800, 39800, 39800, 39800, 39800, 39800, 39800, 39800, 39800, 39800, 39800, 39800],
-            "ETC_NAV": [500, 1000, 1000, 1000, 1000, 1000, 1000, 1500, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000],
-            "INS_WAIVER": [1000, 2000, 2000, 2000, 2000, 2000, 2000, 3000, 4000, 4000, 4000, 4000, 4000, 4000, 5000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000],
-            "WINTER_TIRES": [1000, 2000, 3000, 3000, 3000, 3000, 3000, 4000, 5000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000]
-        };
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.tooltip-box.show').forEach(el => el.classList.remove('show'));
+    });
 
-        // 車両クラスの説明文
-        const carDescriptions = {
-            "J-1": "軽自動車（2ドア） - コンパクトで使いやすい車両です。狭い道や市街地での運転に最適です。",
-            "J-2": "軽自動車（4ドア） - 実用的で乗り降りしやすい軽自動車です。小さなお荷物も積めます。",
-            "J-3": "軽貨物バン - 荷物の多い方におすすめ。後部座席を倒せば大きな荷物も積載可能です。",
-            "J-4": "小型乗用車 - 快適な乗り心地と十分な荷室スペースを兼ね備えた実用的な車両です。"
-        };
-
-        // 車両画像を更新する関数
-        function updateCarImage() {
-            const carClass = document.getElementById("carClass").value;
-            const carImageContainer = document.getElementById("carImageContainer");
-            const carImage = document.getElementById("carImage");
-            const carImageCaption = document.getElementById("carImageCaption");
-            
-            if (carClass) {
-                // 車両クラスに応じた画像パスを設定
-                const imageName = carClass.replace("-", "") + ".png"; // J-1 → J1.png
-                carImage.src = imageName;
-                carImage.alt = document.getElementById("carClass").options[document.getElementById("carClass").selectedIndex].text;
-                
-                // キャプションを設定
-                carImageCaption.textContent = carDescriptions[carClass] || "";
-                
-                // 画像コンテナを表示
-                carImageContainer.style.display = "block";
-            } else {
-                // 車両クラスが選択されていない場合は非表示
-                carImageContainer.style.display = "none";
-            }
+    function calcTotal(days, key) {
+        let total = 0, rem = days;
+        while (rem > 0) {
+            const d = Math.min(rem, 30);
+            total += rateTable[key][d - 1] || 0;
+            rem -= d;
         }
+        return total;
+    }
 
-        // 日付入力欄に今日の日付をデフォルトで設定
-        document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date();
-            const formattedDate = today.toISOString().split("T")[0];
-            document.getElementById("startDate").value = formattedDate;
-            
-            // エラーメッセージをクリア
-            document.getElementById("startDate").addEventListener("input", function() {
-                document.getElementById("startDateError").style.display = "none";
-            });
-            
-            document.getElementById("days").addEventListener("input", function() {
-                document.getElementById("daysError").style.display = "none";
-            });
-            
-            document.getElementById("carClass").addEventListener("change", function() {
-                document.getElementById("carClassError").style.display = "none";
-            });
-        });
+    function fmtDate(d) {
+        const dow = ['日','月','火','水','木','金','土'][d.getDay()];
+        return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${dow}）`;
+    }
 
-        function validateForm() {
-            let valid = true;
-            
-            // 開始日のバリデーション
-            const startDate = document.getElementById("startDate").value;
-            if (!startDate) {
-                document.getElementById("startDateError").style.display = "block";
-                valid = false;
-            }
-            
-            // 日数のバリデーション
-            const days = parseInt(document.getElementById("days").value);
-            if (isNaN(days) || days < 1) {
-                document.getElementById("daysError").style.display = "block";
-                valid = false;
-            }
-            
-            // 車両クラスのバリデーション
-            const carClass = document.getElementById("carClass").value;
-            if (!carClass) {
-                document.getElementById("carClassError").style.display = "block";
-                valid = false;
-            }
-            
-            return valid;
-        }
+    function row(label, value) {
+        return `<div class="result-row"><span class="result-label">${label}</span><span class="result-value">${value}</span></div>`;
+    }
 
-        function calculateAndShowResult() {
-            if (!validateForm()) {
-                return;
-            }
-            
-            // ステップ表示の更新
-            const steps = document.querySelectorAll('.step');
-            steps[0].classList.remove('active');
-            steps[1].classList.add('active');
-            
-            const startDate = document.getElementById("startDate").value;
-            const days = parseInt(document.getElementById("days").value);
-            const carClass = document.getElementById("carClass").value;
-            const insurance = document.getElementById("insurance").checked;
-            const waiver = document.getElementById("waiver").checked;
-            const tires = document.getElementById("tires").checked;
-            const etc = document.getElementById("etc").checked;
-            const gps = document.getElementById("gps").checked;
+    function calculate() {
+        let ok = true;
 
-            let totalBaseRate = 0;
-            let insuranceCost = 0;
-            let waiverCost = 0;
-            let tiresCost = 0;
-            let etcCost = 0;
-            let gpsCost = 0;
-            let remainingDays = days;
-            const maxDaysPerRate = 30;
+        const startVal = document.getElementById('startDate').value;
+        const days     = parseInt(document.getElementById('days').value, 10);
+        const carClass = document.getElementById('carClass').value;
 
-            // 30日ごとに料金を計算
-            while (remainingDays > 0) {
-                const daysToCalculate = Math.min(remainingDays, maxDaysPerRate);
-                const rateIndex = Math.min(daysToCalculate - 1, 29); // インデックスは0から始まる
-                
-                totalBaseRate += rateTable[carClass][rateIndex] || 0;
-                insuranceCost += insurance ? (rateTable.INS_WAIVER[rateIndex] || 0) : 0;
-                waiverCost += waiver ? (rateTable.INS_WAIVER[rateIndex] || 0) : 0;
-                tiresCost += tires ? (rateTable.WINTER_TIRES[rateIndex] || 0) : 0;
-                etcCost += etc ? (rateTable.ETC_NAV[rateIndex] || 0) : 0;
-                gpsCost += gps ? (rateTable.ETC_NAV[rateIndex] || 0) : 0;
-                
-                remainingDays -= daysToCalculate;
-            }
+        document.getElementById('errDate').style.display = (!startVal) ? 'block' : 'none';
+        if (!startVal) ok = false;
 
-            const subtotal = totalBaseRate + insuranceCost + waiverCost + tiresCost + etcCost + gpsCost;
-            const tax = Math.round(subtotal * 0.1);
-            const total = subtotal + tax;
+        document.getElementById('errDays').style.display = (isNaN(days) || days < 1) ? 'block' : 'none';
+        if (isNaN(days) || days < 1) ok = false;
 
-            // 利用開始日と返却日
-            const startDateObj = new Date(startDate);
-            const returnDateObj = new Date(startDate);
-            returnDateObj.setDate(startDateObj.getDate() + days);
-            
-            // 日付フォーマット
-            const formatDate = (date) => {
-                const year = date.getFullYear();
-                const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                const day = date.getDate().toString().padStart(2, '0');
-                const dayOfWeek = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()];
-                return `${year}年${month}月${day}日(${dayOfWeek})`;
-            };
-            
-            const formattedStartDate = formatDate(startDateObj);
-            const formattedReturnDate = formatDate(returnDateObj);
+        document.getElementById('errCar').style.display = (!carClass) ? 'block' : 'none';
+        if (!carClass) ok = false;
 
-            // 結果用の車両画像表示 (サイズ調整済み)
-            const carImageHTML = carClass ? 
-                `<div style="text-align: center; margin: 10px 0;">
-                    <img src="${carClass.replace("-", "")}.png" alt="${document.getElementById("carClass").options[document.getElementById("carClass").selectedIndex].text}" style="max-width: 100%; max-height: 120px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border: 1px solid #eaeaea;">
-                </div>` : '';
+        if (!ok) return;
 
-            // 結果表示
-            const resultContent = document.getElementById("resultContent");
-            resultContent.innerHTML = `
-                <div class="result-row">
-                    <span class="result-label">ご利用開始日:</span>
-                    <span class="result-value">${formattedStartDate}</span>
-                </div>
-                <div class="result-row">
-                    <span class="result-label">ご返却日:</span>
-                    <span class="result-value">${formattedReturnDate}</span>
-                </div>
-                <div class="result-row">
-                    <span class="result-label">ご利用日数:</span>
-                    <span class="result-value">${days}日間</span>
-                </div>
-                <div class="result-row">
-                    <span class="result-label">選択車両:</span>
-                    <span class="result-value">${document.getElementById("carClass").options[document.getElementById("carClass").selectedIndex].text}</span>
-                </div>
-                ${carImageHTML}
-                <div class="result-row">
-                    <span class="result-label">基本料金:</span>
-                    <span class="result-value">¥${totalBaseRate.toLocaleString()}</span>
-                </div>
-                ${insurance ? `
-                <div class="result-row">
-                    <span class="result-label">車両保険:</span>
-                    <span class="result-value">¥${insuranceCost.toLocaleString()}</span>
-                </div>` : ''}
-                ${waiver ? `
-                <div class="result-row">
-                    <span class="result-label">免責補償:</span>
-                    <span class="result-value">¥${waiverCost.toLocaleString()}</span>
-                </div>` : ''}
-                ${tires ? `
-                <div class="result-row">
-                    <span class="result-label">スタッドレスタイヤ:</span>
-                    <span class="result-value">¥${tiresCost.toLocaleString()}</span>
-                </div>` : ''}
-                ${etc ? `
-                <div class="result-row">
-                    <span class="result-label">ETC:</span>
-                    <span class="result-value">¥${etcCost.toLocaleString()}</span>
-                </div>` : ''}
-                ${gps ? `
-                <div class="result-row">
-                    <span class="result-label">カーナビ:</span>
-                    <span class="result-value">¥${gpsCost.toLocaleString()}</span>
-                </div>` : ''}
-                <div class="result-row">
-                    <span class="result-label">小計:</span>
-                    <span class="result-value">¥${subtotal.toLocaleString()}</span>
-                </div>
-                <div class="result-row">
-                    <span class="result-label">消費税(10%):</span>
-                    <span class="result-value">¥${tax.toLocaleString()}</span>
-                </div>
-                <div class="result-row total-row">
-                    <span class="result-label">合計金額:</span>
-                    <span class="result-value">¥${total.toLocaleString()}</span>
-                </div>
-            `;
+        const ins    = document.getElementById('insurance').checked;
+        const waiver = document.getElementById('waiver').checked;
+        const tires  = document.getElementById('tires').checked;
+        const etc    = document.getElementById('etc').checked;
+        const gps    = document.getElementById('gps').checked;
 
-            // 結果エリアの表示
-            const resultArea = document.getElementById("result");
-            resultArea.style.display = "block";
-            
-            // スクロールして結果表示
-            resultArea.scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
+        const base    = calcTotal(days, carClass);
+        const insCost = ins    ? calcTotal(days, 'INS_WAIVER') : 0;
+        const wvCost  = waiver ? calcTotal(days, 'INS_WAIVER') : 0;
+        const tireCost= tires  ? calcTotal(days, 'WINTER_TIRES') : 0;
+        const etcCost = etc    ? calcTotal(days, 'ETC_NAV') : 0;
+        const gpsCost = gps    ? calcTotal(days, 'ETC_NAV') : 0;
+
+        const subtotal = base + insCost + wvCost + tireCost + etcCost + gpsCost;
+        const tax      = Math.round(subtotal * 0.1);
+        const total    = subtotal + tax;
+
+        const start  = new Date(startVal);
+        const ret    = new Date(startVal);
+        ret.setDate(start.getDate() + days);
+
+        const carLabel = document.getElementById('carClass').options[document.getElementById('carClass').selectedIndex].text;
+
+        let html = '';
+        html += row('ご利用開始日', fmtDate(start));
+        html += row('ご返却日',     fmtDate(ret));
+        html += row('ご利用日数',   `${days}日間`);
+        html += row('選択車両',     carLabel);
+        html += row('基本料金',     `¥${base.toLocaleString()}`);
+        if (ins)    html += row('車両保険',          `¥${insCost.toLocaleString()}`);
+        if (waiver) html += row('免責補償',          `¥${wvCost.toLocaleString()}`);
+        if (tires)  html += row('スタッドレスタイヤ',`¥${tireCost.toLocaleString()}`);
+        if (etc)    html += row('ETC',               `¥${etcCost.toLocaleString()}`);
+        if (gps)    html += row('カーナビ',          `¥${gpsCost.toLocaleString()}`);
+        html += row('小計', `¥${subtotal.toLocaleString()}`);
+        html += row('消費税（10%）', `¥${tax.toLocaleString()}`);
+
+        document.getElementById('resultRows').innerHTML = html;
+        document.getElementById('totalAmount').textContent = `¥${total.toLocaleString()}`;
+
+        const card = document.getElementById('resultCard');
+        card.classList.add('visible');
+        setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    }
+</script>
+
 </body>
 </html>
