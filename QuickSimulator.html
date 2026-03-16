@@ -3,850 +3,442 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JBレンタカー 30日プラン見積もり</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <title>30日プラン見積もり - JBレンタカー石巻店</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
-    :root {
-      --primary: #06356f;      /* 濃いネイビー - ヘッダー背景 */
-      --primary-light: #0a4d90;
-      --accent: #FFD700;       /* 黄色 - アクセント */
-      --accent-light: #FFEB99;
-      --dark: #333333;         /* 濃いグレー - テキスト */
-      --text: #333333;
-      --text-light: #666666;
-      --light: #f5f5f5;
-      --white: #ffffff;
-      --success: #28a745;
-      --error: #dc3545;
-      --shadow: rgba(0, 0, 0, 0.1);
-      --border: #dddddd;
-      --radius: 4px;           /* より角張ったデザイン */
-      --transition: all 0.3s ease;
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Noto Sans JP', sans-serif;
-      color: var(--text);
-      line-height: 1.6;
-      background-color: var(--light);
-      padding: 20px;
+      font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      background: #f0f4f8;
+      color: #333;
+      -webkit-font-smoothing: antialiased;
     }
-    
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      background-color: var(--white);
-      border-radius: 0;
-      box-shadow: 0 5px 15px var(--shadow);
-      overflow: hidden;
-    }
-    
+
     header {
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 20px;
+      background: linear-gradient(135deg, #0068e9, #0051b5);
+      padding: 20px 16px 24px;
       text-align: center;
-      position: relative;
-      border-bottom: 3px solid var(--accent);
+      color: white;
     }
-    
-    h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
+
+    header img { max-width: 90px; margin-bottom: 8px; }
+    header h1 { font-size: 19px; font-weight: 700; letter-spacing: .05em; }
+    header p { font-size: 13px; opacity: .85; margin-top: 4px; }
+
+    main {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px 14px 60px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+      padding: 20px 18px;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 14px;
       font-weight: 700;
+      color: #333;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    
-    header p {
-      font-size: 18px;
-      opacity: 0.9;
-    }
-    
-    .intro {
-      padding: 30px 20px;
-      text-align: center;
-      background-color: var(--white);
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .intro p {
-      max-width: 800px;
-      margin: 0 auto;
-      font-size: 16px;
-      color: var(--text-light);
-    }
-    
-    .simulator {
-      padding: 30px 20px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    
-    .selector {
-      margin-bottom: 40px;
-      text-align: center;
-    }
-    
-    .selector label {
+
+    .card-title i { color: #0068e9; }
+
+    /* セレクト */
+    .field-group { margin-bottom: 0; }
+
+    .field-group label {
       display: block;
-      margin-bottom: 15px;
-      font-weight: 500;
-      font-size: 20px;
-      color: var(--dark);
-    }
-    
-    .selector select {
-      width: 100%;
-      max-width: 500px;
-      padding: 15px;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 18px;
-      color: var(--dark);
-      background-color: var(--white);
-      box-shadow: 0 2px 5px var(--shadow);
-      cursor: pointer;
-      transition: var(--transition);
-      appearance: none;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%234682B4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-      background-repeat: no-repeat;
-      background-position: right 15px center;
-      background-size: 20px;
-    }
-    
-    .selector select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(70, 130, 180, 0.3);
-    }
-    
-    .estimate-box {
-      display: none;
-      border-radius: 0;
-      overflow: hidden;
-      margin-top: 20px;
-      background-color: var(--white);
-      box-shadow: 0 2px 10px var(--shadow);
-      animation: fadeIn 0.5s ease-out;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .car-details {
-      display: flex;
-      flex-wrap: wrap;
-      padding: 25px;
-      background-color: var(--light);
-      align-items: center;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .car-image {
-      width: 250px;
-      height: 180px;
-      background-color: var(--white);
-      border-radius: var(--radius);
-      box-shadow: 0 3px 10px var(--shadow);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 30px;
-      margin-bottom: 15px;
-      overflow: hidden;
-      position: relative;
-    }
-    
-    .car-image img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      transition: transform 0.3s ease;
-    }
-    
-    .car-image:hover img {
-      transform: scale(1.05);
-    }
-    
-    .car-image i {
-      font-size: 60px;
-      color: var(--text-light);
-    }
-    
-    .car-info {
-      flex: 1;
-      min-width: 250px;
-      padding: 10px;
-    }
-    
-    .car-info h2 {
-      font-size: 26px;
-      margin-bottom: 15px;
-      color: var(--primary);
+      font-size: 13px;
       font-weight: 700;
+      color: #555;
+      margin-bottom: 6px;
     }
-    
-    .car-info p {
-      font-size: 18px;
-      color: var(--text-light);
-      line-height: 1.4;
-    }
-    
-    .cost-section {
-      padding: 30px;
-    }
-    
-    .section-title {
-      font-size: 22px;
-      color: var(--dark);
-      margin-bottom: 20px;
-      position: relative;
-      padding-bottom: 10px;
-      font-weight: 500;
-    }
-    
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 60px;
-      height: 3px;
-      background-color: var(--accent);
-    }
-    
-    .cost-table {
+
+    .field-group select {
       width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-bottom: 30px;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 2px 8px var(--shadow);
+      padding: 12px 14px;
+      border: 1.5px solid #dde3ec;
+      border-radius: 10px;
+      font-size: 15px;
+      font-family: inherit;
+      color: #333;
+      background: #fafbfd;
+      transition: border-color .2s, box-shadow .2s;
+      -webkit-appearance: none;
     }
-    
-    .cost-table th, .cost-table td {
-      padding: 15px 20px;
-      text-align: left;
+
+    .field-group select:focus {
+      outline: none;
+      border-color: #0068e9;
+      box-shadow: 0 0 0 3px rgba(0,104,233,.15);
+      background: white;
     }
-    
-    .cost-table th {
-      background-color: var(--primary);
-      color: var(--white);
-      font-weight: 500;
-      font-size: 16px;
+
+    /* 車両画像 */
+    .car-image-wrap {
+      display: none;
+      text-align: center;
+      margin: 14px 0 0;
     }
-    
-    .cost-table th:first-child {
-      border-radius: 0;
+
+    .car-image-wrap img {
+      max-width: 100%;
+      max-height: 120px;
+      border-radius: 10px;
+      border: 1.5px solid #eee;
     }
-    
-    .cost-table th:last-child {
-      border-radius: 0;
+
+    .car-caption {
+      font-size: 12px;
+      color: #999;
+      margin-top: 6px;
     }
-    
-    .cost-table tr:nth-child(odd) td {
-      background-color: var(--light);
-    }
-    
-    .cost-table tr:hover td {
-      background-color: rgba(41, 128, 185, 0.05);
-    }
-    
-    .cost-table td {
-      border-bottom: 1px solid var(--border);
-      font-size: 16px;
-      vertical-align: middle;
-    }
-    
-    .cost-table td:last-child {
-      font-weight: 500;
-      color: var(--dark);
-    }
-    
-    .toggle-container {
+
+    /* オプション */
+    .option-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .option-row {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      background: #f7f9fc;
+      border: 1.5px solid #e8edf5;
+      border-radius: 10px;
+      padding: 12px 14px;
+      transition: border-color .2s, background .2s;
     }
-    
+
+    .option-row.active {
+      border-color: #0068e9;
+      background: #eef5ff;
+    }
+
+    .option-info { display: flex; flex-direction: column; }
+    .option-name { font-size: 13px; font-weight: 700; color: #333; }
+    .option-price { font-size: 12px; color: #999; margin-top: 2px; }
+
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
     .toggle-switch {
       position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 30px;
+      width: 48px;
+      height: 26px;
     }
-    
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
     .slider {
       position: absolute;
+      inset: 0;
+      background: #ccc;
+      border-radius: 99px;
       cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: var(--transition);
-      border-radius: 30px;
+      transition: background .3s;
     }
-    
-    .slider:before {
+
+    .slider::before {
+      content: '';
       position: absolute;
-      content: "";
-      height: 22px;
-      width: 22px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: var(--transition);
+      width: 20px;
+      height: 20px;
+      background: white;
       border-radius: 50%;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      top: 3px;
+      left: 3px;
+      transition: transform .3s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.2);
     }
-    
-    input:checked + .slider {
-      background-color: var(--success);
+
+    input:checked + .slider { background: #0068e9; }
+    input:checked + .slider::before { transform: translateX(22px); }
+
+    .toggle-label {
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 48px;
+      text-align: center;
+      padding: 3px 8px;
+      border-radius: 99px;
     }
-    
-    input:checked + .slider:before {
-      transform: translateX(30px);
+
+    .label-on  { background: #eef5ff; color: #0068e9; }
+    .label-off { background: #f5f5f5; color: #aaa; }
+
+    /* 結果 */
+    .result-card {
+      display: none;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
+      padding: 20px 18px;
+      margin-bottom: 14px;
     }
-    
-    input:focus + .slider {
-      box-shadow: 0 0 1px var(--success);
-    }
-    
-    .mandatory-item {
-      font-weight: 500;
-    }
-    
-    .option-item {
-      color: var(--text);
-    }
-    
-    .insurance-item {
-      color: var(--primary-light);
-    }
-    
-    .summary {
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 25px;
-      border-radius: 0;
-    }
-    
-    .summary-title {
-      font-size: 20px;
-      margin-bottom: 15px;
-      color: var(--accent);
-      font-weight: 500;
-    }
-    
-    .summary-row {
+
+    .result-card.visible { display: block; }
+
+    .result-row {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0;
-      font-size: 16px;
-    }
-    
-    .summary-row.total {
-      font-size: 24px;
-      font-weight: 700;
-      padding-top: 15px;
-      margin-top: 15px;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .notice {
-      margin-top: 30px;
-      padding: 20px;
-      background-color: #f9f9f9;
-      border-left: 4px solid var(--accent);
-      border-radius: 0;
-    }
-    
-    .notice h3 {
-      color: var(--dark);
-      margin-bottom: 10px;
-      font-size: 18px;
-      font-weight: 500;
-    }
-    
-    .notice p {
-      font-size: 15px;
-      margin-bottom: 8px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-    }
-    
-    .notice p i {
-      color: var(--success);
-      margin-right: 8px;
-    }
-    
-    .notice a {
-      color: var(--primary-light);
-      text-decoration: none;
-      font-weight: 500;
-      transition: var(--transition);
-    }
-    
-    .notice a:hover {
-      color: var(--primary);
-      text-decoration: underline;
-    }
-    
-    footer {
-      text-align: center;
-      padding: 15px;
-      background-color: var(--primary);
-      color: var(--white);
       font-size: 14px;
-      position: relative;
-      border-top: 3px solid var(--accent);
+      padding: 9px 0;
+      border-bottom: 1px solid #f0f4f8;
     }
-    
-    footer a {
-      color: var(--accent-light);
-      text-decoration: none;
-      transition: var(--transition);
-    }
-    
-    footer a:hover {
-      color: var(--white);
-      text-decoration: underline;
-    }
-    
-    .footer-info {
+
+    .result-row:last-of-type { border-bottom: none; }
+    .result-label { color: #777; }
+    .result-value { font-weight: 700; color: #333; }
+
+    .total-block {
+      background: linear-gradient(135deg, #0068e9, #0051b5);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-top: 14px;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
+      color: white;
     }
-    
-    .footer-info div {
-      margin: 0 15px;
-      display: flex;
-      align-items: center;
+
+    .total-block .label { font-size: 14px; opacity: .9; }
+    .total-block .amount { font-size: 24px; font-weight: 700; }
+
+    /* 注意書き */
+    .note-card {
+      background: #f7f9fc;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #666;
+      line-height: 1.8;
     }
-    
-    .footer-info i {
-      margin-right: 8px;
-      font-size: 18px;
-    }
-    
-    /* レスポンシブデザイン */
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-      
-      h1 {
-        font-size: 24px;
-      }
-      
-      header p {
-        font-size: 16px;
-      }
-      
-      .selector label {
-        font-size: 18px;
-      }
-      
-      .selector select {
-        padding: 12px;
-        font-size: 16px;
-      }
-      
-      .car-details {
-        flex-direction: column;
-        padding: 20px;
-      }
-      
-      .car-image {
-        width: 100%;
-        max-width: 250px;
-        margin-right: 0;
-        margin-bottom: 20px;
-      }
-      
-      .car-info {
-        text-align: center;
-      }
-      
-      .car-info h2 {
-        font-size: 22px;
-      }
-      
-      .car-info p {
-        font-size: 16px;
-      }
-      
-      .cost-section {
-        padding: 20px;
-      }
-      
-      .cost-table th, .cost-table td {
-        padding: 12px 10px;
-        font-size: 14px;
-      }
-      
-      .summary {
-        padding: 20px;
-      }
-      
-      .summary-row {
-        font-size: 14px;
-      }
-      
-      .summary-row.total {
-        font-size: 20px;
-      }
-      
-      .footer-info div {
-        margin: 5px 0;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .cost-table th, .cost-table td {
-        padding: 10px 8px;
-        font-size: 13px;
-      }
-      
-      .toggle-switch {
-        width: 50px;
-        height: 26px;
-      }
-      
-      .slider:before {
-        height: 18px;
-        width: 18px;
-      }
-      
-      input:checked + .slider:before {
-        transform: translateX(24px);
-      }
+
+    .note-card a { color: #0068e9; font-weight: 700; text-decoration: none; }
+
+    footer {
+      background: linear-gradient(135deg, #0068e9, #0051b5);
+      color: white;
+      text-align: center;
+      padding: 18px;
+      font-size: 13px;
+      line-height: 1.8;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>30日プラン見積もり</h1>
-      <p>ご希望の車両クラスを選択して、レンタル料金をシミュレーション</p>
-    </header>
-    
-    <div class="intro">
-      <p>下記のメニューから車両クラスを選択すると、30日レンタルの料金とオプションを自動計算します。<br>お客様のニーズに合わせた最適なプランをお選びいただけます。</p>
+
+<header>
+  <img src="logo.png" alt="JBレンタカー石巻店">
+  <h1>30日プラン見積もり</h1>
+  <p>車両クラスを選ぶだけで即時計算</p>
+</header>
+
+<main>
+
+  <!-- 車両選択 -->
+  <div class="card">
+    <div class="card-title"><i class="fas fa-car"></i> 車両クラスを選択</div>
+    <div class="field-group">
+      <select id="carClass" onchange="onClassChange()">
+        <option value="">選択してください</option>
+        <option value="J1">J1：軽自動車（2ドア）</option>
+        <option value="J2">J2：軽自動車（4ドア）</option>
+        <option value="J3">J3：軽貨物バン</option>
+        <option value="J4">J4：小型乗用車</option>
+      </select>
     </div>
-    
-    <div class="simulator">
-      <div class="selector">
-        <label for="carClass">車両クラスを選択してください</label>
-        <select id="carClass">
-          <option value="">-- 選択してください --</option>
-          <option value="J1">J1クラス（2ドア／軽自動車）</option>
-          <option value="J2">J2クラス（4ドア／軽自動車）</option>
-          <option value="J3">J3クラス（軽貨物バンタイプ）</option>
-          <option value="J4">J4クラス（小型乗用車）</option>
-        </select>
-      </div>
-      
-      <div id="estimate" class="estimate-box">
-        <div class="car-details">
-          <div class="car-image">
-            <i class="fas fa-car"></i>
-          </div>
-          <div class="car-info">
-            <h2 id="classTitle"></h2>
-            <p id="classDescription"></p>
-          </div>
-        </div>
-        
-        <div class="cost-section">
-          <h3 class="section-title">料金詳細</h3>
-          <table class="cost-table">
-            <thead>
-              <tr>
-                <th>項目</th>
-                <th>選択</th>
-                <th>金額（税抜）</th>
-              </tr>
-            </thead>
-            <tbody id="costDetails"></tbody>
-          </table>
-          
-          <div class="summary">
-            <h3 class="summary-title">料金サマリー</h3>
-            <div class="summary-row">
-              <span>基本料金（税抜）：</span>
-              <span id="basePrice">¥0</span>
-            </div>
-            <div class="summary-row">
-              <span>オプション料金（税抜）：</span>
-              <span id="optionPrice">¥0</span>
-            </div>
-            <div class="summary-row">
-              <span>小計金額（税抜）：</span>
-              <span id="subtotal">¥0</span>
-            </div>
-            <div class="summary-row">
-              <span>消費税（10％）：</span>
-              <span id="tax">¥0</span>
-            </div>
-            <div class="summary-row total">
-              <span>合計金額（税込）：</span>
-              <span id="total">¥0</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="notice">
-          <h3>ご利用に関する重要なお知らせ</h3>
-          <p><i class="fas fa-check-circle"></i> 30日以上のご利用で宮城県内配送無料（水曜祝日を除く平日のみ）</p>
-          <p><i class="fas fa-check-circle"></i> 返却の際はJBレンタカー石巻店となります</p>
-          <p><i class="fas fa-check-circle"></i> その他の料金シミュレーションは <a href="https://jbrentacar.github.io/FeeCalculation/" target="_blank">くわしく見積もり</a> でご確認ください</p>
-          <p><i class="fas fa-check-circle"></i> ご不明な点がございましたら、お気軽にお問い合わせください</p>
-        </div>
-      </div>
+    <div class="car-image-wrap" id="carImageWrap">
+      <img id="carImage" src="" alt="">
+      <div class="car-caption" id="carCaption"></div>
     </div>
-    
-    <footer>
-      <div>&copy; 2025 JBレンタカー</div>
-      <div class="footer-info">
-        <div><i class="fas fa-map-marker-alt"></i> 宮城県石巻市南中里2-9-27</div>
-        <div><i class="fas fa-phone"></i> <a href="tel:0120204625">0120-204-625</a></div>
-      </div>
-    </footer>
   </div>
-  
-  <script>
-    // クラスごとの基本料金とイメージを定義
-    const classData = {
-      J1: { 
-        title: "J1クラス（2ドア／軽自動車）", 
-        description: "アルト、ミニカ、ミラなど",
-        basePrice: 23940,
-        image: "J1.png"
-      },
-      J2: { 
-        title: "J2クラス（4ドア／軽自動車）", 
-        description: "ワゴンR、EKワゴン、ムーブなど",
-        basePrice: 29580,
-        image: "J2.png"
-      },
-      J3: { 
-        title: "J3クラス（軽貨物バンタイプ）", 
-        description: "ハイゼット、ミニキャブ、アクティなど",
-        basePrice: 39500,
-        image: "J3.png"
-      },
-      J4: { 
-        title: "J4クラス（小型乗用車）", 
-        description: "ヴィッツ、フィット、デミオなど",
-        basePrice: 39800,
-        image: "J4.png"
-      }
-    };
-    
-    // オプション情報の定義
-    const options = [
-      { 
-        id: "etc", 
-        label: "ETC車載器 (選択オプション)", 
-        price: 2000, 
-        type: "option",
-        default: false
-      },
-      { 
-        id: "navi", 
-        label: "カーナビ (選択オプション)", 
-        price: 2000, 
-        type: "option",
-        default: false
-      },
-      { 
-        id: "winter", 
-        label: "スタッドレスタイヤ (選択オプション)", 
-        price: 6000, 
-        type: "option",
-        default: false
-      },
-      { 
-        id: "insurance", 
-        label: "車両保険（任意加入）", 
-        price: 6000, 
-        type: "insurance",
-        default: false
-      },
-      { 
-        id: "liability", 
-        label: "免責補償（任意加入）", 
-        price: 6000, 
-        type: "insurance",
-        default: false
-      }
-    ];
-    
-    // DOM要素の取得
-    const carClassSelect = document.getElementById("carClass");
-    const estimateBox = document.getElementById("estimate");
-    const classTitle = document.getElementById("classTitle");
-    const classDescription = document.getElementById("classDescription");
-    const costDetails = document.getElementById("costDetails");
-    const basePriceElement = document.getElementById("basePrice");
-    const optionPriceElement = document.getElementById("optionPrice");
-    const subtotalElement = document.getElementById("subtotal");
-    const taxElement = document.getElementById("tax");
-    const totalElement = document.getElementById("total");
-    
-    // 金額をフォーマットする関数
-    function formatCurrency(amount) {
-      return "¥" + amount.toLocaleString();
+
+  <!-- オプション -->
+  <div class="card" id="optionCard" style="display:none;">
+    <div class="card-title"><i class="fas fa-plus-circle"></i> オプション</div>
+    <div class="option-list">
+
+      <div class="option-row" id="row-etc">
+        <div class="option-info">
+          <span class="option-name">ETC</span>
+          <span class="option-price">+2,000円</span>
+        </div>
+        <div class="toggle-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="opt-etc" onchange="updateResult()">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label label-off" id="lbl-etc">OFF</span>
+        </div>
+      </div>
+
+      <div class="option-row" id="row-navi">
+        <div class="option-info">
+          <span class="option-name">カーナビ</span>
+          <span class="option-price">+2,000円</span>
+        </div>
+        <div class="toggle-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="opt-navi" onchange="updateResult()">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label label-off" id="lbl-navi">OFF</span>
+        </div>
+      </div>
+
+      <div class="option-row" id="row-winter">
+        <div class="option-info">
+          <span class="option-name">スタッドレスタイヤ</span>
+          <span class="option-price">+6,000円</span>
+        </div>
+        <div class="toggle-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="opt-winter" onchange="updateResult()">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label label-off" id="lbl-winter">OFF</span>
+        </div>
+      </div>
+
+      <div class="option-row" id="row-insurance">
+        <div class="option-info">
+          <span class="option-name">車両保険（任意加入）</span>
+          <span class="option-price">+6,000円</span>
+        </div>
+        <div class="toggle-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="opt-insurance" onchange="updateResult()">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label label-off" id="lbl-insurance">OFF</span>
+        </div>
+      </div>
+
+      <div class="option-row" id="row-liability">
+        <div class="option-info">
+          <span class="option-name">免責補償（任意加入）</span>
+          <span class="option-price">+6,000円</span>
+        </div>
+        <div class="toggle-wrap">
+          <label class="toggle-switch">
+            <input type="checkbox" id="opt-liability" onchange="updateResult()">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label label-off" id="lbl-liability">OFF</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 結果 -->
+  <div class="result-card" id="resultCard">
+    <div class="card-title"><i class="fas fa-receipt"></i> お見積もり結果（30日）</div>
+    <div class="result-row"><span class="result-label">基本料金</span><span class="result-value" id="r-base">―</span></div>
+    <div class="result-row" id="rr-etc" style="display:none;"><span class="result-label">ETC</span><span class="result-value">¥2,000</span></div>
+    <div class="result-row" id="rr-navi" style="display:none;"><span class="result-label">カーナビ</span><span class="result-value">¥2,000</span></div>
+    <div class="result-row" id="rr-winter" style="display:none;"><span class="result-label">スタッドレスタイヤ</span><span class="result-value">¥6,000</span></div>
+    <div class="result-row" id="rr-insurance" style="display:none;"><span class="result-label">車両保険</span><span class="result-value">¥6,000</span></div>
+    <div class="result-row" id="rr-liability" style="display:none;"><span class="result-label">免責補償</span><span class="result-value">¥6,000</span></div>
+    <div class="result-row"><span class="result-label">小計</span><span class="result-value" id="r-sub">―</span></div>
+    <div class="result-row"><span class="result-label">消費税（10%）</span><span class="result-value" id="r-tax">―</span></div>
+    <div class="total-block">
+      <span class="label">合計金額（税込）</span>
+      <span class="amount" id="r-total">―</span>
+    </div>
+  </div>
+
+  <!-- 注意書き -->
+  <div class="note-card">
+    <i class="fas fa-info-circle" style="color:#0068e9;margin-right:6px;"></i>
+    30日以上のご利用で宮城県内配送無料（水曜・祝日を除く平日のみ）。<br>
+    ご返却はJBレンタカー石巻店までお越しください。<br>
+    日数が異なる場合は<a href="https://jbrentacar.github.io/FeeCalculation/">くわしく見積もり</a>をご利用ください。
+  </div>
+
+</main>
+
+<footer>
+  &copy; 2025 JBレンタカー石巻店<br>
+  0120-204-625
+</footer>
+
+<script>
+  const classData = {
+    J1: { base: 23940, desc: 'アルト・ミニカ・ミラなど', img: 'J1.png' },
+    J2: { base: 29580, desc: 'ワゴンR・EKワゴン・ムーブなど', img: 'J2.png' },
+    J3: { base: 39500, desc: 'ハイゼット・ミニキャブ・アクティなど', img: 'J3.png' },
+    J4: { base: 39800, desc: 'ヴィッツ・フィット・デミオなど', img: 'J4.png' },
+  };
+
+  const opts = [
+    { id: 'etc',       price: 2000 },
+    { id: 'navi',      price: 2000 },
+    { id: 'winter',    price: 6000 },
+    { id: 'insurance', price: 6000 },
+    { id: 'liability', price: 6000 },
+  ];
+
+  function onClassChange() {
+    const val = document.getElementById('carClass').value;
+    const wrap = document.getElementById('carImageWrap');
+    const optCard = document.getElementById('optionCard');
+
+    if (val && classData[val]) {
+      document.getElementById('carImage').src = classData[val].img;
+      document.getElementById('carCaption').textContent = classData[val].desc;
+      wrap.style.display = 'block';
+      optCard.style.display = 'block';
+      updateResult();
+    } else {
+      wrap.style.display = 'none';
+      optCard.style.display = 'none';
+      document.getElementById('resultCard').classList.remove('visible');
     }
-    
-    // 料金を計算して表示を更新する関数
-    function calculateTotal() {
-      const selectedClass = carClassSelect.value;
-      if (!selectedClass || !classData[selectedClass]) return;
-      
-      const basePrice = classData[selectedClass].basePrice;
-      let optionPrice = 0;
-      
-      // 選択されたオプションの料金を計算
-      options.forEach(option => {
-        const checkbox = document.getElementById(option.id);
-        if (checkbox && checkbox.checked) {
-          optionPrice += option.price;
-        }
-      });
-      
-      // 合計金額を計算
-      const subtotal = basePrice + optionPrice;
-      const tax = Math.floor(subtotal * 0.1);
-      const total = subtotal + tax;
-      
-      // 表示を更新
-      basePriceElement.textContent = formatCurrency(basePrice);
-      optionPriceElement.textContent = formatCurrency(optionPrice);
-      subtotalElement.textContent = formatCurrency(subtotal);
-      taxElement.textContent = formatCurrency(tax);
-      totalElement.textContent = formatCurrency(total);
-    }
-    
-    // トグルスイッチを作成する関数
-    function createToggleSwitch(option) {
-      const label = document.createElement("label");
-      label.className = "toggle-switch";
-      
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.id = option.id;
-      input.checked = option.default;
-      input.addEventListener("change", calculateTotal);
-      
-      const slider = document.createElement("span");
-      slider.className = "slider";
-      
-      label.appendChild(input);
-      label.appendChild(slider);
-      
-      return label;
-    }
-    
-    // 車両クラス選択時の処理
-    carClassSelect.addEventListener("change", function() {
-      const selectedClass = carClassSelect.value;
-      
-      if(selectedClass && classData[selectedClass]) {
-        const data = classData[selectedClass];
-        
-        // クラス情報を表示
-        classTitle.textContent = data.title;
-        classDescription.textContent = data.description;
-        
-        // 車両画像を表示
-        const carImageContainer = document.querySelector('.car-image');
-        if (data.image) {
-          carImageContainer.innerHTML = `<img src="${data.image}" alt="${data.title}">`;
-        } else {
-          carImageContainer.innerHTML = '<i class="fas fa-car"></i>';
-        }
-        
-        // コスト詳細テーブルをクリア
-        costDetails.innerHTML = "";
-        
-        // 基本料金の行を追加
-        const baseRow = document.createElement("tr");
-        baseRow.className = "mandatory-item";
-        
-        const baseLabel = document.createElement("td");
-        baseLabel.textContent = "基本料金 (30日レンタル)";
-        
-        const baseToggle = document.createElement("td");
-        baseToggle.innerHTML = '<div class="toggle-container"><i class="fas fa-check" style="color: var(--success)"></i></div>';
-        
-        const baseValue = document.createElement("td");
-        baseValue.textContent = formatCurrency(data.basePrice);
-        
-        baseRow.appendChild(baseLabel);
-        baseRow.appendChild(baseToggle);
-        baseRow.appendChild(baseValue);
-        costDetails.appendChild(baseRow);
-        
-        // オプションの行を追加
-        options.forEach(option => {
-          const row = document.createElement("tr");
-          
-          if (option.type === "option") {
-            row.className = "option-item";
-          } else if (option.type === "insurance") {
-            row.className = "insurance-item";
-          }
-          
-          const labelCell = document.createElement("td");
-          labelCell.textContent = option.label;
-          
-          const toggleCell = document.createElement("td");
-          const toggleContainer = document.createElement("div");
-          toggleContainer.className = "toggle-container";
-          toggleContainer.appendChild(createToggleSwitch(option));
-          toggleCell.appendChild(toggleContainer);
-          
-          const valueCell = document.createElement("td");
-          valueCell.textContent = formatCurrency(option.price);
-          
-          row.appendChild(labelCell);
-          row.appendChild(toggleCell);
-          row.appendChild(valueCell);
-          costDetails.appendChild(row);
-        });
-        
-        // 料金を計算して表示
-        calculateTotal();
-        
-        // 見積もりボックスを表示
-        estimateBox.style.display = "block";
-      } else {
-        // 選択がないか無効な場合は見積もりボックスを非表示
-        estimateBox.style.display = "none";
-      }
+  }
+
+  function updateResult() {
+    const val = document.getElementById('carClass').value;
+    if (!val) return;
+
+    const base = classData[val].base;
+    let optTotal = 0;
+
+    opts.forEach(o => {
+      const cb  = document.getElementById('opt-' + o.id);
+      const lbl = document.getElementById('lbl-' + o.id);
+      const row = document.getElementById('row-' + o.id);
+      const rr  = document.getElementById('rr-' + o.id);
+      const on  = cb.checked;
+
+      lbl.textContent = on ? 'ON' : 'OFF';
+      lbl.className = 'toggle-label ' + (on ? 'label-on' : 'label-off');
+      row.classList.toggle('active', on);
+      if (rr) rr.style.display = on ? 'flex' : 'none';
+      if (on) optTotal += o.price;
     });
-  </script>
+
+    const sub   = base + optTotal;
+    const tax   = Math.round(sub * 0.1);
+    const total = sub + tax;
+
+    document.getElementById('r-base').textContent = '¥' + base.toLocaleString();
+    document.getElementById('r-sub').textContent  = '¥' + sub.toLocaleString();
+    document.getElementById('r-tax').textContent  = '¥' + tax.toLocaleString();
+    document.getElementById('r-total').textContent = '¥' + total.toLocaleString();
+
+    const card = document.getElementById('resultCard');
+    card.classList.add('visible');
+  }
+</script>
+
 </body>
 </html>
